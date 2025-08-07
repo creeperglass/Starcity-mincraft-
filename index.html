@@ -14,10 +14,10 @@
 
     <style>
         body {
-            font-family: Tahoma, sans-serif;
-            background: repeating-linear-gradient(45deg, #7fff00, #f7f7f7 10px, # 10px,#e2e2e2 20px);
-            direction: rtl;
-            padding: 20px;
+    font-family: Tahoma, sans-serif;
+    background: repeating-linear-gradient(45deg, #7fff00 0, #f7f7f7 10px, #e2e2e2 20px);
+    direction: rtl;
+    padding: 20px;
         }
         .episode {
             background-color: cyan;
@@ -47,11 +47,42 @@
             text-align: center;
             margin-top: 30px;
         }
+        .rainbow-text {
+  font-weight: bold;
+  background: linear-gradient(
+    270deg,
+    red,
+    orange,
+    yellow,
+    green,
+    blue,
+    indigo,
+    violet,
+    red
+  );
+  background-size: 1400% 1400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbowAnimation 10s ease infinite;
+}
+
+@keyframes rainbowAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
     </style>
     </head>
 <body>
     <h1>سریال استار سیتی - فصل اول</h1>
-    <p>ساخته شده توسط من یعنی کریپر . این سریال دارای ۲۲ قسمت است که به زودی همگی در آپارات منتشر خواهند شد.</p><div class="episode">
+  <p>ساخته شده توسط من یعنی کریپر . این سریال دارای ۲۲ قسمت است که به زودی همگی در آپارات منتشر خواهند شد.</p><div class="episode">
+      <p><a href="README.html" class="rainbow-text">صفحه‌ی معرفی ما</a></p>
     <h2>قسمت اول</h2>
     <p>گلس من وارد شهر می‌شود و می‌بیند املاکی نیست. وقتی املاکی برمی‌گردد، خانه‌ی سبز را از او می‌خرد و وسایل اولیه مثل تخت و میز و صندلی ناهارخوری را از مغازه‌ای دیگر می‌خرد. هنگام گشت و گذار در شهر، آقای کاسمیر به او پیشنهاد می‌دهد که برایش ماشین ببرد و در ازای آن ۱۰ هزار دلار می‌دهد. گلس من از مبلغ تعجب می‌کند و یک آیفون ۱۳ پرومکس می‌خرد. آقای کاسمیر آدرس یک ماشین آبی را برایش می‌فرستد، گلس من شیشه‌اش را می‌شکند و ماشین را برای او می‌برد.</p>
     <a href="https://www.aparat.com/v/eloy6dn" target="_blank">مشاهده قسمت اول</a>
