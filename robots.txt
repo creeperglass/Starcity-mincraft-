@@ -1,2 +1,25 @@
+# robots.txt for Starcity Minecraft website
+# GitHub Pages site: https://creeperglass.github.io/Starcity-mincraft-/
+# ساخته شده برای کمک به گوگل و دیگر خزنده‌ها برای دسترسی راحت به محتوای سایت
+
 User-agent: *
-Disallow:
+# به همه خزنده‌ها (گوگل، بینگ، یاندکس و...) اجازه کامل داده می‌شود
+Allow: /
+
+# تا اینجا گفتیم که همه‌چی مجازه. حالا چند بخش خاص برای اطلاعات بیشتر:
+
+# اجازه دسترسی به فایل‌های HTML اصلی
+Allow: /index.html
+Allow: /README.html
+
+# اگر sitemap اضافه کردی، بهتره اینجا هم اعلامش کنیم
+Sitemap: https://creeperglass.github.io/Starcity-mincraft-/sitemap.xml
+
+# بعضی از خزنده‌ها به دنبال اطلاعات تماس یا صفحات خاص می‌گردن
+# اگه داشتی، مسیرهاشون رو اینجا می‌تونی مشخص کنی. فعلاً نداریم.
+
+# Crawlers are welcome to index all pages of this website.
+# Feel free to crawl at any time.
+
+# نسخه: 1.0
+# آخرین بروزرسانی: 07 August 2025
