@@ -1,0 +1,5 @@
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="180" fill="#6a0dad" rx="20" ry="20" />
+  <text x="50%" y="50%" fill="white" font-family="Tahoma, sans-serif" font-size="72" font-weight="bold" dominant-baseline="middle" text-anchor="middle">SC</text>
+  <path d="M90 60 L100 90 L80 90 Z" fill="yellow" />
+</svg>
