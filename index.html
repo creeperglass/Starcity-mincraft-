@@ -106,6 +106,21 @@ a {
     color: #ff4500;
     
 }
+    input[type="search"] {
+    color: lime;            /* رنگ متن تایپ شده */
+    background-color: white; /* رنگ پس‌زمینه دلخواه */
+}
+
+/* اگر می‌خوای placeholder هم سبز باشه */
+input[type="search"]::placeholder {
+    color: lime; /* رنگ متن پیش‌فرض */
+}
+
+/* پیشوندها برای مرورگرهای مختلف */
+input::-webkit-input-placeholder { color: lime; } /* Chrome, Safari */
+input:-moz-placeholder { color: lime; } /* Firefox 18- */
+input::-moz-placeholder { color: lime; } /* Firefox 19+ */
+input:-ms-input-placeholder { color: lime; } /* IE 10+ */
 </style>
 
 <link rel="image_src" href="https://s6.uupload.ir/files/file_000000004b5861f4be18d6c4dc94adde_(1)_fcj1.png" />
