@@ -82,7 +82,15 @@ a {
     background-color: #0080ff;
 }
 .episode-content {
-    display: none;
+    display: block; /* پیش‌فرض همه قسمت‌ها نمایش داده شوند */
+    margin-bottom: 20px;
+}
+.episode-content.active {
+    display: block; /* قسمت فعال بعد از کلیک روی منو */
+    max-height: 500px; /* می‌توان عدد را تغییر داد */
+    overflow: auto;    /* اضافه شدن اسکرول در صورت نیاز */
+}
+    
 }
 .episode-content.active {
     display: block;
@@ -96,6 +104,7 @@ a {
     max-width: 700px;
     font-weight: bold;
     color: #ff4500;
+    
 }
 </style>
 
@@ -205,9 +214,17 @@ a {
 <script>
 function showEpisode(id) {
     const episodes = document.querySelectorAll('.episode-content');
-    episodes.forEach(ep => ep.classList.remove('active'));
-    const active = document.getElementById(id);
-    if(active) active.classList.add('active');
+    episodes.forEach(ep => {
+        if(ep.id === id) {
+            ep.classList.add('active'); 
+            ep.style.maxHeight = "500px"; 
+            ep.style.overflow = "auto";  
+        } else {
+            ep.classList.remove('active');
+            ep.style.maxHeight = "none"; 
+            ep.style.overflow = "visible";
+        }
+    });
 }
 </script>
 
