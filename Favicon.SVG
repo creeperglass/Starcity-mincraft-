@@ -1,20 +1,71 @@
 <svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
-  <!-- پس‌زمینه -->
-  <rect width="180" height="180" fill="#6a0dad" rx="20" ry="20" />
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4a90e2"/>
+      <stop offset="50%" stop-color="#6a0dad"/>
+      <stop offset="100%" stop-color="#7b1fa2"/>
+    </linearGradient>
 
-  <!-- متن مرکزی -->
-  <text x="50%" y="50%" fill="white" font-family="Tahoma, sans-serif" font-size="72" font-weight="bold" dominant-baseline="middle" text-anchor="middle">SC</text>
+    <radialGradient id="lightGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="yellow" stop-opacity="0.9"/>
+      <stop offset="40%" stop-color="yellow" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="yellow" stop-opacity="0"/>
+    </radialGradient>
 
-  <!-- فانوس -->
-  <g transform="translate(90, 105)">
-    <!-- بدنه فانوس -->
-    <rect x="-10" y="-30" width="20" height="40" fill="#FFD700" stroke="#FFA500" stroke-width="2" rx="3" />
-    <!-- نور فانوس -->
-    <circle cx="0" cy="-30" r="15" fill="yellow" opacity="0.7" />
-    <circle cx="0" cy="-30" r="25" fill="yellow" opacity="0.3" />
-    <circle cx="0" cy="-30" r="35" fill="yellow" opacity="0.15" />
-    <!-- جزئیات شیشه -->
-    <line x1="-10" y1="-30" x2="10" y2="-30" stroke="#FFA500" stroke-width="1"/>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="textShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="3" dy="3" stdDeviation="2" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <rect width="180" height="180" fill="url(#bgGrad)" rx="20" ry="20"/>
+
+  <g transform="translate(90, 95)" filter="url(#glow)">
+    <!-- بدنه فانوس دقیق‌تر با جزئیات -->
+    <path d="M-10,-30 
+             Q-10,0 0,10 
+             Q10,0 10,-30 
+             Z" fill="gold" stroke="#FFA500" stroke-width="2"/>
+    <!-- دسته بالای فانوس -->
+    <rect x="-4" y="-42" width="8" height="12" fill="#FFA500" rx="2"/>
+    <!-- خطوط شیشه داخلی -->
     <line x1="0" y1="-30" x2="0" y2="10" stroke="#FFA500" stroke-width="1"/>
+    <line x1="-5" y1="-25" x2="5" y2="-25" stroke="#FFD700" stroke-width="0.7"/>
+    <line x1="-5" y1="-15" x2="5" y2="-15" stroke="#FFD700" stroke-width="0.7"/>
+    <!-- نور داخلی و Glow -->
+    <circle cx="0" cy="-30" r="15" fill="yellow" opacity="0.8"/>
+    <circle cx="0" cy="-30" r="25" fill="yellow" opacity="0.3"/>
+    <circle cx="0" cy="-30" r="35" fill="url(#lightGrad)"/>
+    <!-- شعاع پراکنده -->
+    <g>
+      <line x1="0" y1="-30" x2="-35" y2="-55" stroke="yellow" stroke-width="0.8" opacity="0.3"/>
+      <line x1="0" y1="-30" x2="35" y2="-55" stroke="yellow" stroke-width="0.8" opacity="0.3"/>
+      <line x1="0" y1="-30" x2="-40" y2="-45" stroke="yellow" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="-30" x2="40" y2="-45" stroke="yellow" stroke-width="0.7" opacity="0.2"/>
+      <line x1="0" y1="-30" x2="-20" y2="-60" stroke="yellow" stroke-width="0.6" opacity="0.15"/>
+      <line x1="0" y1="-30" x2="20" y2="-60" stroke="yellow" stroke-width="0.6" opacity="0.15"/>
+    </g>
+  </g>
+
+  <text x="50%" y="105" fill="white" font-family="Verdana, sans-serif" font-size="72"
+        font-weight="bold" dominant-baseline="middle" text-anchor="middle"
+        stroke="#FFD700" stroke-width="2" filter="url(#textShadow)">
+    S C
+  </text>
+
+  <g>
+    <line x1="90" y1="65" x2="90" y2="20" stroke="yellow" stroke-width="1.2" opacity="0.5"/>
+    <line x1="80" y1="70" x2="60" y2="50" stroke="yellow" stroke-width="1" opacity="0.4"/>
+    <line x1="100" y1="70" x2="120" y2="50" stroke="yellow" stroke-width="1" opacity="0.4"/>
+    <line x1="85" y1="60" x2="60" y2="30" stroke="yellow" stroke-width="0.8" opacity="0.3"/>
+    <line x1="95" y1="60" x2="120" y2="30" stroke="yellow" stroke-width="0.8" opacity="0.3"/>
   </g>
 </svg>
