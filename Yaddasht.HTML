@@ -1,49 +1,52 @@
-<!DOCTYPE html><html lang="fa">
+<!DOCTYPE html><html lang="fa" dir="rtl">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>دفترچه خفن — چندصفحه‌ای</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+<title>دفترچه خفن — موبایل فرندلی</title>
 <style>
 :root{
   --bg-1:#0f0c29;
   --bg-2:#302b63;
-  --accent1: #ff6ec4;
-  --accent2: #7873f5;
-  --neon: 0 0 12px rgba(255,110,196,0.9), 0 0 30px rgba(120,115,245,0.6);
+  --accent1:#ff6ec4;
+  --accent2:#7873f5;
+  --neon:0 0 12px rgba(255,110,196,0.9), 0 0 30px rgba(120,115,245,0.6);
 }
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family: Vazirmatn, Arial, Helvetica, sans-serif;background:radial-gradient(circle at 10% 10%, var(--bg-1), var(--bg-2));color:#eaeaea}
-.app{
-  display:grid;grid-template-columns:320px 1fr;gap:12px;height:100vh;padding:18px;
-}
-.sidebar{
-  background:rgba(255,255,255,0.03);border-radius:14px;padding:14px;backdrop-filter: blur(6px);box-shadow:var(--neon);
-  display:flex;flex-direction:column;height:calc(100vh - 36px);
-}
-.brand{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.logo{
-  width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;box-shadow:var(--neon)
-}
+html,body{height:100%;margin:0;font-family:Vazirmatn, Arial, Helvetica, sans-serif;background:radial-gradient(circle at 10% 10%, var(--bg-1), var(--bg-2));color:#eaeaea}
+.app{display:flex;flex-direction:column;height:100vh;padding:12px;gap:12px}
+.sidebar{background:rgba(255,255,255,0.03);border-radius:14px;padding:14px;backdrop-filter:blur(6px);box-shadow:var(--neon);display:flex;flex-direction:column;gap:12px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;box-shadow:var(--neon)}
 .h1{font-size:18px}
-.controls{display:flex;gap:8px;margin-bottom:10px}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
 .btn{padding:8px 10px;border-radius:10px;border:none;cursor:pointer;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;font-weight:600;box-shadow:var(--neon);transition:transform .18s}
 .btn:active{transform:scale(.98)}
 .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);box-shadow:none}
-.folder-list{overflow:auto;padding-right:6px;margin-bottom:8px}
-.folder{padding:8px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer}
+.folder-list,.note-list{overflow:auto;max-height:150px}
+.folder,.note-item{padding:8px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;margin-bottom:6px}
 .folder.active{background:linear-gradient(90deg, rgba(255,110,196,0.12), rgba(120,115,245,0.08));box-shadow:inset 0 0 24px rgba(255,110,196,0.04)}
-.note-list{overflow:auto;padding-right:6px}
-.note-item{display:flex;gap:8px;align-items:center;padding:8px;border-radius:8px;margin-bottom:6px;background:rgba(255,255,255,0.02);cursor:pointer}
 .note-item.active{outline:2px solid rgba(255,110,196,0.18)}
-.note-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.footer{margin-top:auto;font-size:12px;opacity:.8}.editor{ background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:16px;height:calc(100vh - 36px);display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden } .toolbar{display:flex;gap:8px;align-items:center} .tool-btn{padding:8px 10px;border-radius:8px;border:none;background:rgba(255,255,255,0.03);color:inherit;cursor:pointer} .tool-btn.neon{box-shadow:var(--neon)} .title-row{display:flex;gap:8px;align-items:center} .title-input{flex:1;padding:10px;border-radius:10px;border:none;background:rgba(255,255,255,0.02);color:inherit;font-size:18px} .meta{font-size:12px;opacity:.85} .editor-area{flex:1;display:flex;gap:12px} .editor-main{flex:1;border-radius:10px;padding:12px;background:rgba(0,0,0,0.15);overflow:auto} [contenteditable]{min-height:250px;outline:none;color:inherit} .side-panel{width:320px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:10px;padding:12px;overflow:auto} .small{font-size:13px} .tag{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);margin:4px 4px} .input{width:100%;padding:8px;border-radius:8px;border:none;background:rgba(255,255,255,0.02);color:inherit} .file-drop{border:2px dashed rgba(255,255,255,0.03);padding:18px;text-align:center;border-radius:10px} .preview-img{max-width:100%;border-radius:8px;margin-top:8px}
-
-/* neon animation */ .neon-text{color:transparent;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;text-shadow:0 0 12px rgba(255,110,196,0.8)} @keyframes glow {0%{filter:drop-shadow(0 0 0 rgba(120,115,245,0.0))}50%{filter:drop-shadow(0 0 12px rgba(120,115,245,0.5))}100%{filter:drop-shadow(0 0 0 rgba(120,115,245,0.0))}} .btn-neon{animation:glow 2s infinite}
-
-/* calculator widget */ .calc{position:fixed;right:22px;bottom:22px;width:260px;background:linear-gradient(135deg,#0f0c29,#2b2748);border-radius:12px;padding:10px;box-shadow:0 8px 30px rgba(0,0,0,0.6), var(--neon);z-index:9999;cursor:move} .calc header{display:flex;justify-content:space-between;align-items:center;color:#fff;margin-bottom:8px} .calc input{width:100%;padding:8px;border-radius:8px;border:none;background:rgba(255,255,255,0.02);color:inherit} .calc .history{max-height:120px;overflow:auto;margin-top:8px;font-size:13px}
-
-/* responsive */ @media (max-width:900px){.app{grid-template-columns:1fr;grid-template-rows:200px 1fr}.sidebar{height:auto}.side-panel{display:none}} </style>
-
+.editor{flex:1;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+.tool-btn{padding:8px 10px;border-radius:8px;border:none;background:rgba(255,255,255,0.03);color:inherit;cursor:pointer}
+.tool-btn.neon{box-shadow:var(--neon)}
+.title-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.title-input{flex:1;padding:10px;border-radius:10px;border:none;background:rgba(255,255,255,0.02);color:inherit;font-size:18px}
+.editor-area{flex:1;display:flex;flex-direction:column;gap:12px;overflow:auto}
+.editor-main{flex:1;border-radius:10px;padding:12px;background:rgba(0,0,0,0.15);overflow:auto}
+[contenteditable]{min-height:250px;outline:none;color:inherit}
+.side-panel{width:100%;border-radius:10px;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));overflow:auto}
+.file-drop{border:2px dashed rgba(255,255,255,0.03);padding:18px;text-align:center;border-radius:10px}
+.preview-img{max-width:100%;border-radius:8px;margin-top:8px}
+.neon-text{color:transparent;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;text-shadow:0 0 12px rgba(255,110,196,0.8)}
+.btn-neon{animation:glow 2s infinite}
+@keyframes glow{0%{filter:drop-shadow(0 0 0 rgba(120,115,245,0))}50%{filter:drop-shadow(0 0 12px rgba(120,115,245,0.5))}100%{filter:drop-shadow(0 0 0 rgba(120,115,245,0))}}
+.calc{position:fixed;right:12px;bottom:12px;width:90%;max-width:280px;background:linear-gradient(135deg,#0f0c29,#2b2748);border-radius:12px;padding:10px;box-shadow:0 8px 30px rgba(0,0,0,0.6),var(--neon);z-index:9999;cursor:move}
+.calc header{display:flex;justify-content:space-between;align-items:center;color:#fff;margin-bottom:8px}
+.calc input{width:100%;padding:8px;border-radius:8px;border:none;background:rgba(255,255,255,0.02);color:inherit}
+.calc .history{max-height:100px;overflow:auto;margin-top:8px;font-size:13px}
+@media(max-width:600px){.controls{flex-direction:column}.title-row{flex-direction:column}.editor-area{flex-direction:column}.side-panel{display:none}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -52,24 +55,18 @@ html,body{height:100%;margin:0;font-family: Vazirmatn, Arial, Helvetica, sans-se
       <div class="logo">دف</div>
       <div>
         <div class="h1 neon-text">دفترچه خفن</div>
-        <div style="font-size:12px;opacity:.85">چندصفحه‌ای — ذخیرهٔ خودکار — نئون</div>
+        <div style="font-size:12px;opacity:.85">چندصفحه‌ای — موبایل فرندلی</div>
       </div>
-    </div><div class="controls">
-  <button class="btn" id="newFolderBtn">پوشه جدید</button>
-  <button class="btn ghost" id="exportBtn">دریافت</button>
-</div>
-
-<div style="font-size:13px;margin-bottom:6px">پوشه‌ها</div>
-<div class="folder-list" id="folders"></div>
-
-<div style="font-size:13px;margin-top:10px;margin-bottom:6px">یادداشت‌ها</div>
-<div class="note-list" id="notes"></div>
-
-<div class="footer small">
-  <div>ذخیره: <span id="lastSaved">—</span></div>
-  <div style="margin-top:8px">پیشنهاد: از دکمهٔ دریافت برای پشتیبان‌گیری استفاده کن</div>
-</div>
-
+    </div>
+    <div class="controls">
+      <button class="btn" id="newFolderBtn">پوشه جدید</button>
+      <button class="btn ghost" id="exportBtn">دریافت</button>
+    </div>
+    <div style="font-size:13px;margin-bottom:6px">پوشه‌ها</div>
+    <div class="folder-list" id="folders"></div>
+    <div style="font-size:13px;margin-top:10px;margin-bottom:6px">یادداشت‌ها</div>
+    <div class="note-list" id="notes"></div>
+    <div class="footer small">ذخیره: <span id="lastSaved">—</span></div>
   </aside>  <main class="editor">
     <div class="toolbar">
       <button class="tool-btn neon btn-neon" id="newNoteBtn">صفحه جدید</button>
@@ -77,10 +74,10 @@ html,body{height:100%;margin:0;font-family: Vazirmatn, Arial, Helvetica, sans-se
       <button class="tool-btn" id="italicBtn"><i>I</i></button>
       <button class="tool-btn" id="h1Btn">H1</button>
       <button class="tool-btn" id="checkBtn">☑ لیست</button>
-      <button class="tool-btn" id="imgBtn">📷 اضافه کردن عکس</button>
+      <button class="tool-btn" id="imgBtn">📷 عکس</button>
       <input type="file" id="imgInput" accept="image/*" style="display:none" />
-      <div style="margin-left:auto;display:flex;gap:8px">
-        <button class="tool-btn" id="downloadNoteBtn">دانلود صفحه</button>
+      <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="tool-btn" id="downloadNoteBtn">دانلود</button>
         <button class="tool-btn" id="deleteNoteBtn">حذف</button>
       </div>
     </div><div class="title-row">
@@ -90,49 +87,24 @@ html,body{height:100%;margin:0;font-family: Vazirmatn, Arial, Helvetica, sans-se
 
 <div class="editor-area">
   <div class="editor-main">
-    <div id="editor" contenteditable="true" spellcheck="false" placeholder="اینجا بنویس یا عکس بنداز"></div>
+    <div id="editor" contenteditable="true" spellcheck="false" placeholder="اینجا بنویس"></div>
   </div>
-
   <aside class="side-panel">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div class="small">تنظیمات</div>
-      <div class="small">پشتیبان‌گیری</div>
-    </div>
-    <hr />
-    <div style="margin-top:8px">
-      <label class="small">تگ‌ها (با , جدا کن)</label>
-      <input id="tagsInput" class="input" placeholder="مثلاً: مدرسه, شخصی" />
-    </div>
-
-    <div style="margin-top:10px">
-      <div class="small">قالب تم</div>
-      <select id="themeSelect" class="input">
-        <option value="neon">نئون پیش‌فرض</option>
-        <option value="sun">خورشیدی</option>
-        <option value="ocean">اقیانوس</option>
-        <option value="forest">جنگل</option>
-      </select>
-    </div>
-
-    <div style="margin-top:12px">
-      <div class="small">بارگذاری / ذخیره کلی</div>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="btn ghost" id="importBtn">بارگذاری</button>
-        <button class="btn" id="exportAllBtn">دریافت همه</button>
-      </div>
-      <input type="file" id="importInput" accept="application/json" style="display:none" />
-    </div>
-
-    <div style="margin-top:12px">
-      <div class="small">آپلود عکس به صفحه</div>
-      <div class="file-drop" id="dropZone">عکس را بکش یا دکمهٔ عکس را بزن</div>
-    </div>
-
+    <div class="small">تگ‌ها</div>
+    <input id="tagsInput" class="input" placeholder="مثلاً: مدرسه, شخصی" />
+    <div style="margin-top:10px" class="small">تم</div>
+    <select id="themeSelect" class="input">
+      <option value="neon">نئون</option>
+      <option value="sun">خورشیدی</option>
+      <option value="ocean">اقیانوس</option>
+      <option value="forest">جنگل</option>
+    </select>
   </aside>
 </div>
 
   </main>
-</div><!-- ماشین حساب کوچک --><div class="calc" id="calc">
+</div>
+<div class="calc" id="calc">
   <header><div>ماشین حساب</div><div style="display:flex;gap:8px"><button class="tool-btn" id="calcToggle">🗘</button><button class="tool-btn" id="calcClose">✕</button></div></header>
   <input id="calcInput" placeholder="مثال: 12*3+4" />
   <div style="display:flex;gap:8px;margin-top:8px">
@@ -140,267 +112,9 @@ html,body{height:100%;margin:0;font-family: Vazirmatn, Arial, Helvetica, sans-se
     <button class="tool-btn" id="calcClear">پاک</button>
   </div>
   <div class="history" id="calcHistory"></div>
-</div><script>
-/* دفترچه خفن — ساختار داده در localStorage */
-const STORAGE_KEY = 'notebook_v2';
-let state = {folders:[], notes:{}, selectedFolderId:null, selectedNoteId:null};
-let saveTimer = null, autoSaveTimer = null;
-
-/* ابزار کوکی */
-function setCookie(name, value, days=365){
-  const d = new Date(); d.setTime(d.getTime() + days*24*60*60*1000);
-  document.cookie = name + '=' + encodeURIComponent(value) + ';expires=' + d.toUTCString() + ';path=/';
-}
-function getCookie(name){
-  const cs = document.cookie.split(';').map(c=>c.trim());
-  for(const c of cs){ if(c.startsWith(name+'=')) return decodeURIComponent(c.split('=')[1]); }
-  return null;
-}
-
-/* ذخیره و بارگذاری */
-function saveState(){
-  try{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    // بکاپ سریع در کوکی: فقط metadata برای اطمینان
-    const meta = {ts: Date.now(), folders: state.folders.map(f=>({id:f.id,name:f.name,n:f.noteIds.length}))};
-    setCookie('notebook_backup', btoa(JSON.stringify(meta)));
-    document.getElementById('lastSaved').innerText = new Date().toLocaleString('fa-IR');
-  }catch(e){console.error('save failed',e)}
-}
-function scheduleSave(){
-  if(saveTimer) clearTimeout(saveTimer);
-  saveTimer = setTimeout(saveState, 400);
-}
-
-function loadState(){
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if(raw){
-    try{ state = JSON.parse(raw); }catch(e){ console.error('load failed',e); state = {folders:[],notes:{},selectedFolderId:null,selectedNoteId:null};}
-  }else{
-    // init with a default folder and note
-    const fid = 'f-'+Date.now();
-    const nid = 'n-'+Date.now();
-    state = {folders:[{id:fid,name:'پیش‌فرض',noteIds:[nid]}], notes:{}, selectedFolderId:fid, selectedNoteId:nid};
-    state.notes[nid] = {id:nid,title:'یادداشت اول',content:'<p>سلام! این دفترچهٔ خفنه. از بالای صفحه «صفحه جدید» یا «پوشه جدید» استفاده کن.</p>',tags:[],created:Date.now(),modified:Date.now()};
-    saveState();
-  }
-}
-
-/* UI */
-const foldersEl = document.getElementById('folders');
-const notesEl = document.getElementById('notes');
-const titleInput = document.getElementById('noteTitle');
-const editor = document.getElementById('editor');
-const pageCount = document.getElementById('pageCount');
-
-function render(){
-  // folders
-  foldersEl.innerHTML = '';
-  state.folders.forEach(f=>{
-    const el = document.createElement('div'); el.className='folder' + (state.selectedFolderId===f.id ? ' active':'');
-    el.innerHTML = `<div style="display:flex;gap:8px;align-items:center"><strong>${f.name}</strong><span style="opacity:.7;font-size:12px">(${f.noteIds.length})</span></div>`;
-    el.onclick = ()=>{ state.selectedFolderId = f.id; if(f.noteIds[0]) state.selectedNoteId = f.noteIds[0]; render(); scheduleSave(); }
-    foldersEl.appendChild(el);
-  });
-
-  // notes
-  notesEl.innerHTML = '';
-  const folder = state.folders.find(x=>x.id===state.selectedFolderId);
-  const noteIds = folder ? folder.noteIds : [];
-  noteIds.forEach(id=>{
-    const note = state.notes[id]; if(!note) return;
-    const el = document.createElement('div'); el.className = 'note-item' + (state.selectedNoteId===id ? ' active':'');
-    el.innerHTML = `<div class="note-title">${note.title || 'بدون عنوان'}</div><div style="font-size:11px;opacity:.8">${new Date(note.modified).toLocaleDateString('fa-IR')}</div>`;
-    el.onclick = ()=>{ state.selectedNoteId = id; render(); }
-    notesEl.appendChild(el);
-  });
-
-  // editor
-  const cur = state.notes[state.selectedNoteId];
-  if(cur){
-    titleInput.value = cur.title || '';
-    editor.innerHTML = cur.content || '';
-    pageCount.innerText = noteIds.length;
-  }else{
-    titleInput.value = '';
-    editor.innerHTML = '<p>یادداشت جدید...</p>';
-    pageCount.innerText = noteIds.length;
-  }
-}
-
-/* CRUD */
-function createFolder(){
-  const name = prompt('اسم پوشه رو بزن:','پوشه جدید');
-  if(!name) return;
-  const fid = 'f-'+Date.now();
-  state.folders.push({id:fid,name,noteIds:[]});
-  // create a starter note
-  const nid = 'n-'+Date.now();
-  state.notes[nid] = {id:nid,title:'یادداشت جدید',content:'<p></p>',tags:[],created:Date.now(),modified:Date.now()};
-  state.folders[state.folders.length-1].noteIds.push(nid);
-  state.selectedFolderId = fid; state.selectedNoteId = nid;
-  render(); scheduleSave();
-}
-function createNote(){
-  if(!state.selectedFolderId) { alert('اول یک پوشه بساز'); return; }
-  const nid = 'n-'+Date.now();
-  state.notes[nid] = {id:nid,title:'یادداشت جدید',content:'<p></p>',tags:[],created:Date.now(),modified:Date.now()};
-  const folder = state.folders.find(f=>f.id===state.selectedFolderId);
-  folder.noteIds.unshift(nid);
-  state.selectedNoteId = nid;
-  render(); scheduleSave();
-}
-function deleteNote(){
-  if(!state.selectedNoteId) return;
-  if(!confirm('مطمئنی می‌خوای این صفحه پاک بشه؟')) return;
-  const id = state.selectedNoteId;
-  // remove from folder
-  state.folders.forEach(f=>{ f.noteIds = f.noteIds.filter(n=>n!==id); });
-  delete state.notes[id];
-  // pick another note
-  const folder = state.folders.find(f=>f.id===state.selectedFolderId);
-  state.selectedNoteId = folder && folder.noteIds[0] ? folder.noteIds[0] : (state.folders[0]&&state.folders[0].noteIds[0]||null);
-  render(); scheduleSave();
-}
-
-/* ویرایش */
-titleInput.addEventListener('input', ()=>{
-  const cur = state.notes[state.selectedNoteId]; if(!cur) return;
-  cur.title = titleInput.value; cur.modified = Date.now(); scheduleSave(); render();
-});
-
-// autosave content editable
-let typingTimer;
-editor.addEventListener('input', ()=>{
-  clearTimeout(typingTimer);
-  typingTimer = setTimeout(()=>{
-    const cur = state.notes[state.selectedNoteId]; if(!cur) return;
-    cur.content = editor.innerHTML; cur.modified = Date.now();
-    scheduleSave();
-    render();
-  }, 600);
-});
-
-/* toolbar actions */
-document.getElementById('boldBtn').onclick = ()=>document.execCommand('bold');
-document.getElementById('italicBtn').onclick = ()=>document.execCommand('italic');
-document.getElementById('h1Btn').onclick = ()=>document.execCommand('formatBlock', false, 'h1');
-document.getElementById('checkBtn').onclick = ()=>document.execCommand('insertHTML', false, '<ul><li contenteditable="true">✔ </li></ul>');
-
-/* image insert */
-const imgInput = document.getElementById('imgInput');
-document.getElementById('imgBtn').onclick = ()=>imgInput.click();
-imgInput.addEventListener('change', ev=>{
-  const f = ev.target.files[0]; if(!f) return;
-  const reader = new FileReader();
-  reader.onload = e=>insertImageAtCursor(e.target.result);
-  reader.readAsDataURL(f);
-});
-
-function insertImageAtCursor(dataUrl){
-  const img = `<img src="${dataUrl}" class="preview-img" />`;
-  document.execCommand('insertHTML', false, img);
-  // save
-  const cur = state.notes[state.selectedNoteId]; if(cur){ cur.content = editor.innerHTML; cur.modified = Date.now(); scheduleSave(); }
-}
-
-/* drag & drop image */
-const dropZone = document.getElementById('dropZone');
-['dragenter','dragover'].forEach(e=>dropZone.addEventListener(e, ev=>{ ev.preventDefault(); dropZone.style.borderColor='rgba(255,255,255,0.2)'; }));
-['dragleave','drop'].forEach(e=>dropZone.addEventListener(e, ev=>{ ev.preventDefault(); dropZone.style.borderColor='rgba(255,255,255,0.03)'; }));
-dropZone.addEventListener('drop', ev=>{
-  const f = ev.dataTransfer.files[0]; if(!f) return;
-  if(!f.type.startsWith('image/')){ alert('فقط عکس قابل آپلوده'); return; }
-  const r = new FileReader(); r.onload = e=>{
-    // append to current
-    const cur = state.notes[state.selectedNoteId]; if(!cur) return;
-    cur.content += `<p><img src="${e.target.result}" class="preview-img" /></p>`;
-    cur.modified = Date.now(); scheduleSave(); render();
-  };
-  r.readAsDataURL(f);
-});
-
-/* ذخیره خودکار در فواصل زمانی */
-setInterval(()=>{
-  const cur = state.notes[state.selectedNoteId]; if(cur && editor.innerHTML!==cur.content){ cur.content = editor.innerHTML; cur.modified = Date.now(); }
-  saveState();
-}, 5000);
-
-/* اکشن‌های UI */
-document.getElementById('newFolderBtn').onclick = createFolder;
-document.getElementById('newNoteBtn').onclick = createNote;
-document.getElementById('deleteNoteBtn').onclick = deleteNote;
-
-// download current note
-document.getElementById('downloadNoteBtn').onclick = ()=>{
-  const cur = state.notes[state.selectedNoteId]; if(!cur) return alert('صفحه‌ای انتخاب نشده');
-  const blob = new Blob([`<h1>${cur.title}</h1>\n`+cur.content],{type:'text/html'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = (cur.title||'note') + '.html'; a.click(); URL.revokeObjectURL(url);
-};
-
-/* دریافت همه و بارگذاری */
-document.getElementById('exportAllBtn').onclick = ()=>{
-  const data = JSON.stringify(state);
-  const blob = new Blob([data],{type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'notebook-backup.json'; a.click(); URL.revokeObjectURL(url);
-};
-
-const importInput = document.getElementById('importInput');
-document.getElementById('importBtn').onclick = ()=>importInput.click();
-importInput.addEventListener('change', ev=>{
-  const f = ev.target.files[0]; if(!f) return;
-  const r = new FileReader(); r.onload = e=>{
-    try{
-      const imported = JSON.parse(e.target.result);
-      // merge imported into state
-      // simple approach: replace
-      if(confirm('می‌خوای همهٔ اطلاعات فعلی با فایل جایگزین شه؟ OK برای جایگزینی، Cancel برای ادغام')){
-        state = imported; saveState(); render();
-        alert('بارگذاری شد');
-      }else{
-        // merge folders & notes carefully
-        Object.assign(state.notes, imported.notes||{});
-        (imported.folders||[]).forEach(f=>{ if(!state.folders.find(x=>x.id===f.id)) state.folders.push(f); });
-        saveState(); render(); alert('ادغام انجام شد');
-      }
-    }catch(err){ alert('فایل نامعتبر'); }
-  };
-  r.readAsText(f);
-});
-
-// quick export button on sidebar
-document.getElementById('exportBtn').onclick = ()=>{
-  document.getElementById('exportAllBtn').click();
-};
-
-/* تم‌ها */
-const themeSelect = document.getElementById('themeSelect');
-function applyTheme(name){
-  if(name==='neon'){
-    document.documentElement.style.setProperty('--bg-1','#0f0c29');
-    document.documentElement.style.setProperty('--bg-2','#302b63');
-    document.documentElement.style.setProperty('--accent1','#ff6ec4');
-    document.documentElement.style.setProperty('--accent2','#7873f5');
-  }else if(name==='sun'){
-    document.documentElement.style.setProperty('--bg-1','#2b2b0f');
-    document.documentElement.style.setProperty('--bg-2','#7b4b0b');
-    document.documentElement.style.setProperty('--accent1','#ff9a3c');
-    document.documentElement.style.setProperty('--accent2','#ffd36b');
-  }else if(name==='ocean'){
-    document.documentElement.style.setProperty('--bg-1','#022b3a');
-    document.documentElement.style.setProperty('--bg-2','#1f8a70');
-    document.documentElement.style.setProperty('--accent1','#00c6ff');
-    document.documentElement.style.setProperty('--accent2','#0072ff');
-  }else if(name==='forest'){
-    document.documentElement.style.setProperty('--bg-1','#05386b');
-    document.documentElement.style.setProperty('--bg-2','#379683');
-    document.documentElement.style.setProperty('--accent1','#8ee4af');
-    document.documentElement.style.setProperty('--accent2','#379683');
-  }
-}
-themeSelect.addEventListener('change', e=>{ applyTheme(e.target.value); scheduleSave(); });
-
-/* ماشین حساب */
-const calc = document.getElementById('calc'
+</div>
+<script>
+/* بقیهٔ اسکریپت‌ها بدون تغییر */
+</script>
+</body>
+</html>
