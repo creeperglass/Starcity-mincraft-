@@ -3,6 +3,665 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Tetris Flags — حرفه‌ای</title>
+
+<!-- GSAP -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<!-- Howler (برای موسیقی) -->
+<script src="https://cdn.jsdelivr.net/npm/howler@2.2.4/dist/howler.min.js"></script>
+
+<style>
+  :root{
+    --bg:#060606; --panel:#0f0f0f; --accent:#1db954; --muted:#bdbdbd;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family: Vazirmatn, system-ui, sans-serif;direction:rtl}
+  .wrap{display:flex;flex-direction:column;align-items:center;padding:12px;gap:10px}
+  h1{margin:6px 0;font-size:18px}
+  #container{width:min(640px,96vw);background:var(--panel);border-radius:12px;padding:12px;box-shadow:0 8px 30px rgba(0,0,0,.6)}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;flex-wrap:wrap}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  select,input,button{background:#141414;border:1px solid #222;color:#fff;padding:8px 10px;border-radius:8px}
+  button{cursor:pointer}
+  #gridWrap{width:100%;overflow:hidden;border-radius:8px;background:#000;display:flex;justify-content:center}
+  #grid{position:relative;touch-action:none;user-select:none}
+  .cell{position:absolute;box-sizing:border-box;border:1px solid rgba(0,0,0,0.25);background-size:cover;background-position:center;overflow:hidden}
+  .overlay{position:absolute;pointer-events:none}
+  .player{position:absolute;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .hud{display:flex;gap:8px;align-items:center;color:var(--muted)}
+  .controls button.big{padding:10px 12px;border-radius:8px}
+  .mobile-controls{display:flex;gap:8px;justify-content:center;margin-top:10px}
+  .mobile-controls button{font-size:20px;padding:12px;border-radius:10px;background:#202020;border:none;color:#fff}
+  @media (max-width:420px){
+    h1{font-size:16px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🎮 Tetris Flags — حرفه‌ای</h1>
+
+  <div id="container">
+    <div class="topbar">
+      <div style="display:flex;gap:8px;align-items:center">
+        <label for="modeSelect">مود:</label>
+        <select id="modeSelect">
+          <option value="simple">تتریس کلاسیک (پرچم‌ها)</option>
+          <option value="escape">فرار آدمک</option>
+        </select>
+        <span class="hud" id="status">وضعیت: آماده</span>
+      </div>
+
+      <div class="controls">
+        <button id="startBtn" class="big">شروع</button>
+        <button id="pauseBtn" class="big">توقف/ادامه</button>
+        <button id="resetBtn" class="big">ریست</button>
+        <button id="soundBtn">🔊</button>
+      </div>
+    </div>
+
+    <div id="gridWrap">
+      <div id="grid"></div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="leftBtn">⬅️</button>
+        <button id="rotateBtn">🔄</button>
+        <button id="rightBtn">➡️</button>
+        <button id="downBtn">⬇️</button>
+        <button id="hardDropBtn">⤓</button>
+      </div>
+      <div class="hud">امتیاز:<span id="score">0</span> &nbsp; سطح:<span id="level">1</span></div>
+    </div>
+
+    <div class="mobile-controls" aria-hidden="false">
+      <button id="mLeft">◀</button>
+      <button id="mUp">▲</button>
+      <button id="mDown">▼</button>
+      <button id="mRight">▶</button>
+      <button id="mRotate">⟳</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =============================
+   تنظیمات اولیه
+   =============================*/
+const GSAP = window.gsap;
+const HOWLER_SRC = ["https://archive.org/download/TetrisThemeMusic/Tetris.mp3"];
+const music = new Howl({ src: HOWLER_SRC, loop: true, volume: 0.45 });
+let soundOn = true;
+
+// WebAudio for sfx (short beeps)
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+const aCtx = AudioCtx ? new AudioCtx() : null;
+function playBeep(freq=440, time=0.05, type='sine', gain=0.05){
+  if(!aCtx) return;
+  const o = aCtx.createOscillator();
+  const g = aCtx.createGain();
+  o.type = type;
+  o.frequency.value = freq;
+  g.gain.value = gain;
+  o.connect(g); g.connect(aCtx.destination);
+  o.start();
+  o.stop(aCtx.currentTime + time);
+}
+
+/* UI elements */
+const modeSelect = document.getElementById('modeSelect');
+const startBtn = document.getElementById('startBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+const resetBtn = document.getElementById('resetBtn');
+const soundBtn = document.getElementById('soundBtn');
+const statusEl = document.getElementById('status');
+const gridEl = document.getElementById('grid');
+const scoreEl = document.getElementById('score');
+const levelEl = document.getElementById('level');
+
+const leftBtn = document.getElementById('leftBtn');
+const rightBtn = document.getElementById('rightBtn');
+const rotateBtn = document.getElementById('rotateBtn');
+const downBtn = document.getElementById('downBtn');
+const hardDropBtn = document.getElementById('hardDropBtn');
+
+const mLeft = document.getElementById('mLeft');
+const mRight = document.getElementById('mRight');
+const mUp = document.getElementById('mUp');
+const mDown = document.getElementById('mDown');
+const mRotate = document.getElementById('mRotate');
+
+/* Grid config */
+const COLS = 10;
+const ROWS = 20;
+let cellSize = 0;
+let gridWidth = 420;
+
+/* Flags list (extensive) */
+const FLAGS = [
+ "af","al","dz","ad","ao","ar","am","au","at","az","bd","be","bz","ba","bw","br","bg","bf","bi","kh",
+ "cm","ca","cv","cl","cn","co","cr","hr","cu","cy","cz","cd","dk","dj","do","ec","eg","sv","ee","et",
+ "fi","fr","ga","ge","de","gh","gr","gt","ht","hn","hk","hu","is","in","id","ir","iq","ie","il","it",
+ "jp","jo","kz","ke","ki","kw","la","lv","lb","ls","lr","ly","lt","lu","mk","mg","mw","my","mv","ml",
+ "mt","mr","mu","mx","md","mn","me","ma","mz","mm","np","nl","nz","ni","ng","kp","no","om","pk","pa",
+ "pg","py","pe","ph","pl","pt","qa","ro","ru","rw","sa","sn","rs","sc","sl","sg","sk","si","sb","za",
+ "kr","es","lk","sd","se","ch","sy","tw","tj","tz","th","tl","tg","to","tt","tn","tr","tm","ug","ua",
+ "ae","uk","us","uy","uz","ve","vn","ye","zm","zw"
+];
+const FLAG_CACHE = {};
+function getFlag(code){
+  if(FLAG_CACHE[code]) return FLAG_CACHE[code];
+  const img = new Image();
+  img.src = `https://flagcdn.com/w80/${code}.png`;
+  img.onerror = ()=>{ FLAG_CACHE[code+'_err']=true; };
+  FLAG_CACHE[code]=img;
+  return img;
+}
+function randFlag(){ return FLAGS[Math.floor(Math.random()*FLAGS.length)]; }
+
+/* Tetris pieces (4x4 matrices for rotation convenience) */
+/* 1 = block, 0 = empty */
+const PIECES = {
+  I: [
+    [[0,0,0,0],
+     [1,1,1,1],
+     [0,0,0,0],
+     [0,0,0,0]]
+  ],
+  O: [
+    [[0,0,0,0],
+     [0,1,1,0],
+     [0,1,1,0],
+     [0,0,0,0]]
+  ],
+  T: [
+    [[0,0,0,0],
+     [0,1,0,0],
+     [1,1,1,0],
+     [0,0,0,0]]
+  ],
+  S: [
+    [[0,0,0,0],
+     [0,1,1,0],
+     [1,1,0,0],
+     [0,0,0,0]]
+  ],
+  Z: [
+    [[0,0,0,0],
+     [1,1,0,0],
+     [0,1,1,0],
+     [0,0,0,0]]
+  ],
+  J: [
+    [[0,0,0,0],
+     [1,0,0,0],
+     [1,1,1,0],
+     [0,0,0,0]]
+  ],
+  L: [
+    [[0,0,0,0],
+     [0,0,1,0],
+     [1,1,1,0],
+     [0,0,0,0]]
+  ]
+};
+// prepare rotations (0..3) for each piece
+function rotateMat(mat){
+  const N = mat.length;
+  const res = Array.from({length:N}, ()=>Array(N).fill(0));
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++) res[c][N-1-r] = mat[r][c];
+  return res;
+}
+const PIECE_ROTATIONS = {};
+for(const p in PIECES){
+  PIECE_ROTATIONS[p] = [];
+  let base = PIECES[p][0];
+  let cur = base;
+  for(let i=0;i<4;i++){
+    PIECE_ROTATIONS[p].push(cur);
+    cur = rotateMat(cur);
+  }
+}
+
+/* Grid model: grid[r][c] = null or {flag, domEl} */
+let grid = [];
+function createEmptyGrid(){
+  grid = Array.from({length: ROWS}, ()=> Array(COLS).fill(null));
+}
+
+/* DOM helpers */
+function resizeGrid(){
+  const wrap = document.getElementById('gridWrap');
+  const maxWidth = Math.min(520, wrap.clientWidth - 8);
+  gridWidth = maxWidth;
+  cellSize = Math.floor(gridWidth / COLS);
+  gridEl.style.width = (cellSize*COLS) + 'px';
+  gridEl.style.height = (cellSize*ROWS) + 'px';
+  gridEl.style.position = 'relative';
+  renderAll();
+}
+window.addEventListener('resize', resizeGrid);
+
+/* render a fixed cell at r,c from grid */
+function renderCell(r,c){
+  const val = grid[r][c];
+  const id = `cell-${r}-${c}`;
+  let el = document.getElementById(id);
+  if(val){
+    if(!el){
+      el = document.createElement('div');
+      el.id = id; el.className = 'cell';
+      el.style.position = 'absolute';
+      el.style.width = cellSize + 'px';
+      el.style.height = cellSize + 'px';
+      gridEl.appendChild(el);
+    }
+    el.style.left = (c*cellSize) + 'px';
+    el.style.top = (r*cellSize) + 'px';
+    el.style.borderRadius = (cellSize*0.06) + 'px';
+    const code = val.flag;
+    if(FLAG_CACHE[code+'_err']){
+      el.style.background = '#444';
+      el.textContent = code.toUpperCase();
+      el.style.color = '#fff';
+      el.style.fontSize = Math.max(10, Math.floor(cellSize*0.28)) + 'px';
+      el.style.display = 'flex';
+      el.style.alignItems = 'center';
+      el.style.justifyContent = 'center';
+    } else {
+      el.style.backgroundImage = `url(${getFlag(code).src})`;
+      el.textContent = '';
+      el.style.backgroundSize = 'cover';
+      el.style.display = '';
+    }
+    el.style.visibility = 'visible';
+  } else {
+    if(el) el.remove();
+  }
+}
+
+/* overlays for active piece */
+function removeActiveOverlay(){
+  const olds = gridEl.querySelectorAll('[id^="active-"]');
+  olds.forEach(e=>e.remove());
+}
+function drawActivePiece(piece){
+  removeActiveOverlay();
+  if(!piece) return;
+  const shape = piece.shape;
+  for(let r=0;r<shape.length;r++){
+    for(let c=0;c<shape[r].length;c++){
+      if(shape[r][c]){
+        const ar = piece.r + r;
+        const ac = piece.c + c;
+        const el = document.createElement('div');
+        el.id = `active-${r}-${c}`;
+        el.className = 'cell overlay';
+        el.style.width = cellSize + 'px';
+        el.style.height = cellSize + 'px';
+        el.style.left = (ac*cellSize) + 'px';
+        el.style.top = (ar*cellSize) + 'px';
+        el.style.borderRadius = (cellSize*0.06) + 'px';
+        const code = piece.flag;
+        if(FLAG_CACHE[code+'_err']){
+          el.style.background = '#666';
+          el.textContent = code.toUpperCase();
+          el.style.display = 'flex';
+          el.style.alignItems = 'center';
+          el.style.justifyContent = 'center';
+        } else {
+          el.style.backgroundImage = `url(${getFlag(code).src})`;
+          el.style.backgroundSize = 'cover';
+        }
+        gridEl.appendChild(el);
+      }
+    }
+  }
+}
+
+/* Utilities: collision check */
+function canPlace(shape, r, c){
+  for(let y=0;y<shape.length;y++){
+    for(let x=0;x<shape[y].length;x++){
+      if(shape[y][x]){
+        const nr = r + y;
+        const nc = c + x;
+        if(nc < 0 || nc >= COLS) return false;
+        if(nr >= ROWS) return false;
+        if(nr >= 0 && grid[nr][nc]) return false;
+      }
+    }
+  }
+  return true;
+}
+
+/* lock piece into grid with animation */
+function lockPiece(piece){
+  playBeep(220,0.06,'square',0.06);
+  const shape = piece.shape;
+  const toAdd = [];
+  for(let y=0;y<shape.length;y++){
+    for(let x=0;x<shape[y].length;x++){
+      if(shape[y][x]){
+        const nr = piece.r + y;
+        const nc = piece.c + x;
+        if(nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS){
+          grid[nr][nc] = { flag: piece.flag };
+          toAdd.push({r:nr,c:nc,flag:piece.flag});
+        }
+      }
+    }
+  }
+  // animate pop-in
+  toAdd.forEach(cell=>{
+    renderCell(cell.r,cell.c);
+    const el = document.getElementById(`cell-${cell.r}-${cell.c}`);
+    if(el) {
+      GSAP.set(el, {scale:0.2, opacity:0});
+      GSAP.to(el, {scale:1, opacity:1, duration:0.18, ease:"back.out(1.4)"});
+    }
+  });
+}
+
+/* clear full rows with animation */
+function clearFullRows(){
+  const fullRows = [];
+  for(let r=0;r<ROWS;r++){
+    if(grid[r].every(cell => cell !== null)) fullRows.push(r);
+  }
+  if(fullRows.length === 0) return 0;
+  // animate rows
+  fullRows.forEach((r, idx) => {
+    for(let c=0;c<COLS;c++){
+      const id = `cell-${r}-${c}`;
+      const el = document.getElementById(id);
+      if(el){
+        GSAP.to(el, {y: -20, opacity:0, scale:0.6, duration:0.3, delay: idx*0.05});
+      }
+    }
+  });
+  // after animation, remove rows and collapse
+  setTimeout(()=>{
+    // remove DOM for those rows
+    fullRows.sort((a,b)=>a-b);
+    for(let ri = fullRows.length -1; ri>=0; ri--){
+      const r = fullRows[ri];
+      grid.splice(r,1);
+      grid.unshift(Array(COLS).fill(null));
+    }
+    // re-render whole grid
+    removeAllCells();
+    for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) renderCell(r,c);
+  }, 380 + fullRows.length*30);
+  // sfx
+  playBeep(880,0.08,'sine',0.04);
+  return fullRows.length;
+}
+
+function removeAllCells(){
+  while(gridEl.firstChild) gridEl.removeChild(gridEl.firstChild);
+}
+
+/* Piece generation (random bag) */
+let bag = [];
+function refillBag(){
+  bag = Object.keys(PIECE_ROTATIONS).slice();
+  // shuffle
+  for(let i=bag.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [bag[i],bag[j]] = [bag[j],bag[i]];
+  }
+}
+function nextPiece(){ 
+  if(bag.length === 0) refillBag();
+  const type = bag.shift();
+  const rot = 0;
+  const shape = PIECE_ROTATIONS[type][rot];
+  const flag = randFlag();
+  // initial position: center horizontally, r = -topOffset
+  const topOffset = getTopOffset(shape);
+  const startR = -topOffset;
+  const startC = Math.floor((COLS - shape[0].length)/2);
+  return { type, rotation: rot, shape: shape, r: startR, c: startC, flag };
+}
+function rotatePiece(piece){
+  const rots = PIECE_ROTATIONS[piece.type];
+  const nextRot = (piece.rotation + 1) % rots.length;
+  const nextShape = rots[nextRot];
+  return { ...piece, rotation: nextRot, shape: nextShape };
+}
+function getTopOffset(shape){
+  for(let r=0;r<shape.length;r++){
+    if(shape[r].some(v=>v)) return r;
+  }
+  return 0;
+}
+
+/* Game state */
+let running = false;
+let paused = false;
+let mode = 'simple';
+let current = null;
+let ghost = null;
+let dropInterval = 700; // ms per step; decreases with level
+let dropAccumulator = 0;
+let lastTime = 0;
+let score = 0;
+let level = 1;
+
+/* Start / Pause / Reset */
+function startGame(){
+  if(!running) {
+    mode = modeSelect.value;
+    running = true; paused = false;
+    createEmptyGrid();
+    removeAllCells();
+    refillBag();
+    current = nextPiece();
+    score = 0; level = 1;
+    scoreEl.textContent = score; levelEl.textContent = level;
+    dropInterval = 700;
+    lastTime = performance.now();
+    statusEl.textContent = `در حال بازی: ${mode}`;
+    if(soundOn) try{ music.play(); }catch(e){}
+    requestAnimationFrame(loop);
+  } else {
+    // restart
+    resetGame();
+    startGame();
+  }
+}
+function pauseGame(){
+  if(!running) return;
+  paused = !paused;
+  if(!paused){
+    lastTime = performance.now();
+    requestAnimationFrame(loop);
+    statusEl.textContent = 'ادامه';
+  } else {
+    statusEl.textContent = 'متوقف';
+  }
+}
+function resetGame(){
+  running = false; paused = false;
+  createEmptyGrid();
+  removeAllCells();
+  current = null;
+  refillBag();
+  score = 0; level = 1;
+  scoreEl.textContent = score; levelEl.textContent = level;
+  try{ music.stop(); }catch(e){}
+  statusEl.textContent = 'آماده';
+}
+
+/* Drop & Lock logic */
+function hardDrop(){
+  if(!current) return;
+  while(true){
+    if(canPlace(current.shape, current.r+1, current.c)) current.r++;
+    else break;
+  }
+  lockAndNext();
+  playBeep(520,0.02,'square',0.06);
+}
+function softDrop(){
+  if(!current) return;
+  if(canPlace(current.shape, current.r+1, current.c)) {
+    current.r++;
+    score += 1;
+    scoreEl.textContent = score;
+    playBeep(400,0.02,'sine',0.02);
+  } else {
+    lockAndNext();
+  }
+}
+function moveLeft(){
+  if(!current) return;
+  if(canPlace(current.shape, current.r, current.c-1)){
+    current.c--;
+    playBeep(260,0.02,'sine',0.02);
+  }
+}
+function moveRight(){
+  if(!current) return;
+  if(canPlace(current.shape, current.r, current.c+1)){
+    current.c++;
+    playBeep(260,0.02,'sine',0.02);
+  }
+}
+function rotateCW(){
+  if(!current) return;
+  const rots = PIECE_ROTATIONS[current.type];
+  const nextRot = (current.rotation + 1) % rots.length;
+  const nextShape = rots[nextRot];
+  // try kicks: basic wall kick attempts
+  const kicks = [[0,0],[0,-1],[0,1],[-1,0],[1,0]];
+  for(const k of kicks){
+    const nr = current.r + k[0];
+    const nc = current.c + k[1];
+    if(canPlace(nextShape, nr, nc)){
+      current.rotation = nextRot;
+      current.shape = nextShape;
+      current.r = nr; current.c = nc;
+      playBeep(600,0.03,'triangle',0.03);
+      return;
+    }
+  }
+}
+
+/* lock current piece and spawn next */
+function lockAndNext(){
+  lockPiece(current);
+  const cleared = clearFullRows();
+  if(cleared > 0){
+    score += 100 * cleared;
+    level = Math.min(20, Math.floor(score/500) + 1);
+    dropInterval = Math.max(120, 700 - (level-1) * 30);
+    levelEl.textContent = level;
+    playBeep(900,0.12,'sine',0.05);
+  }
+  current = nextPiece();
+  // check immediate collision -> game over
+  if(!canPlace(current.shape, current.r, current.c)){
+    gameOver();
+  }
+}
+
+/* game over */
+function gameOver(){
+  running = false;
+  paused = false;
+  try{ music.stop(); }catch(e){}
+  statusEl.textContent = 'باخت';
+  playBeep(120,0.4,'sine',0.08);
+  setTimeout(()=> alert('باختی! دوباره تلاش کن.'), 50);
+}
+
+/* render all static cells and active piece */
+function renderAll(){
+  // render static grid
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) renderCell(r,c);
+  // render active piece overlay
+  drawActivePiece(current);
+}
+
+/* Game loop (requestAnimationFrame) */
+function loop(now){
+  if(!running || paused) return;
+  const dt = now - lastTime;
+  lastTime = now;
+  dropAccumulator += dt;
+  // step
+  if(dropAccumulator >= dropInterval){
+    dropAccumulator -= dropInterval;
+    if(mode === 'simple'){
+      if(canPlace(current.shape, current.r+1, current.c)){
+        current.r++;
+      } else {
+        lockAndNext();
+      }
+    } else if(mode === 'escape'){
+      // in escape: spawn and patterns settle into grid (simpler approach preserved from earlier)
+      // We'll reuse a simple escape logic: spawn horizontal patterns guaranteeing a hole
+      // For brevity we use a local spawn scheduler implemented below (escape-specific)
+      escapeTick();
+    }
+  }
+  renderAll();
+  requestAnimationFrame(loop);
+}
+
+/* =========================
+   Escape mode: patterns dropping (grid-based)
+   =========================*/
+let escapePatterns = [];
+let escapeSpawnAcc = 0;
+let escapeSpawnInterval = 1000;
+function spawnEscapePattern(){
+  // patterns generated like earlier, but we ensure at least one column hole
+  const t = Math.random();
+  const blocks = [];
+  if(t < 0.5){
+    // row with 1-2 holes
+    let holes = Math.random() < 0.7 ? 1 : 2;
+    const holeIdx = [];
+    while(holeIdx.length < holes){
+      const idx = Math.floor(Math.random()*COLS);
+      if(!holeIdx.includes(idx)) holeIdx.push(idx);
+    }
+    for(let c=0;c<COLS;c++){
+      if(!holeIdx.includes(c)) blocks.push({r: -1, c, flag: randFlag()});
+    }
+  } else if(t < 0.8){
+    // some columns
+    const cnt = 3 + Math.floor(Math.random()*3);
+    const cols = [];
+    while(cols.length < cnt){
+      const c = Math.floor(Math.random()*COLS);
+      if(!cols.includes(c)) cols.push(c);
+    }
+    cols.forEach(c=>{
+      const h = 1 + Math.floor(Math.random()*2);
+      for(let k=0;k<h;k++) blocks.push({r: -1 - k, c, flag: randFlag()});
+    });
+  } else {
+    // random single blocks
+    const cnt = 2 + Math.floor(Math.random()*4);
+    for(let i=0;i<cnt;i++){
+      const c = Math.floor(Math.random()*COLS);
+      blocks.push({r: -1 - Math.floor(Math.random()*3), c, flag: randFlag()});
+    }
+  }
+  // ensure at least one hole at settle: compute max fall
+  let maxFall = ROWS;
+  for(const b of blocks){
+    let fall = 0;
+    for(let r = b.r + 1; r < ROWS; r++)<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Tetris Flags — پیشرفته</title>
 
 <!-- Libraries -->
@@ -641,3 +1300,663 @@ function reset(){
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Tetris Flags — حرفه‌ای</title>
+
+<!-- GSAP -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<!-- Howler (برای موسیقی) -->
+<script src="https://cdn.jsdelivr.net/npm/howler@2.2.4/dist/howler.min.js"></script>
+
+<style>
+  :root{
+    --bg:#060606; --panel:#0f0f0f; --accent:#1db954; --muted:#bdbdbd;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family: Vazirmatn, system-ui, sans-serif;direction:rtl}
+  .wrap{display:flex;flex-direction:column;align-items:center;padding:12px;gap:10px}
+  h1{margin:6px 0;font-size:18px}
+  #container{width:min(640px,96vw);background:var(--panel);border-radius:12px;padding:12px;box-shadow:0 8px 30px rgba(0,0,0,.6)}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;flex-wrap:wrap}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  select,input,button{background:#141414;border:1px solid #222;color:#fff;padding:8px 10px;border-radius:8px}
+  button{cursor:pointer}
+  #gridWrap{width:100%;overflow:hidden;border-radius:8px;background:#000;display:flex;justify-content:center}
+  #grid{position:relative;touch-action:none;user-select:none}
+  .cell{position:absolute;box-sizing:border-box;border:1px solid rgba(0,0,0,0.25);background-size:cover;background-position:center;overflow:hidden}
+  .overlay{position:absolute;pointer-events:none}
+  .player{position:absolute;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .hud{display:flex;gap:8px;align-items:center;color:var(--muted)}
+  .controls button.big{padding:10px 12px;border-radius:8px}
+  .mobile-controls{display:flex;gap:8px;justify-content:center;margin-top:10px}
+  .mobile-controls button{font-size:20px;padding:12px;border-radius:10px;background:#202020;border:none;color:#fff}
+  @media (max-width:420px){
+    h1{font-size:16px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🎮 Tetris Flags — حرفه‌ای</h1>
+
+  <div id="container">
+    <div class="topbar">
+      <div style="display:flex;gap:8px;align-items:center">
+        <label for="modeSelect">مود:</label>
+        <select id="modeSelect">
+          <option value="simple">تتریس کلاسیک (پرچم‌ها)</option>
+          <option value="escape">فرار آدمک</option>
+        </select>
+        <span class="hud" id="status">وضعیت: آماده</span>
+      </div>
+
+      <div class="controls">
+        <button id="startBtn" class="big">شروع</button>
+        <button id="pauseBtn" class="big">توقف/ادامه</button>
+        <button id="resetBtn" class="big">ریست</button>
+        <button id="soundBtn">🔊</button>
+      </div>
+    </div>
+
+    <div id="gridWrap">
+      <div id="grid"></div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="leftBtn">⬅️</button>
+        <button id="rotateBtn">🔄</button>
+        <button id="rightBtn">➡️</button>
+        <button id="downBtn">⬇️</button>
+        <button id="hardDropBtn">⤓</button>
+      </div>
+      <div class="hud">امتیاز:<span id="score">0</span> &nbsp; سطح:<span id="level">1</span></div>
+    </div>
+
+    <div class="mobile-controls" aria-hidden="false">
+      <button id="mLeft">◀</button>
+      <button id="mUp">▲</button>
+      <button id="mDown">▼</button>
+      <button id="mRight">▶</button>
+      <button id="mRotate">⟳</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =============================
+   تنظیمات اولیه
+   =============================*/
+const GSAP = window.gsap;
+const HOWLER_SRC = ["https://archive.org/download/TetrisThemeMusic/Tetris.mp3"];
+const music = new Howl({ src: HOWLER_SRC, loop: true, volume: 0.45 });
+let soundOn = true;
+
+// WebAudio for sfx (short beeps)
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+const aCtx = AudioCtx ? new AudioCtx() : null;
+function playBeep(freq=440, time=0.05, type='sine', gain=0.05){
+  if(!aCtx) return;
+  const o = aCtx.createOscillator();
+  const g = aCtx.createGain();
+  o.type = type;
+  o.frequency.value = freq;
+  g.gain.value = gain;
+  o.connect(g); g.connect(aCtx.destination);
+  o.start();
+  o.stop(aCtx.currentTime + time);
+}
+
+/* UI elements */
+const modeSelect = document.getElementById('modeSelect');
+const startBtn = document.getElementById('startBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+const resetBtn = document.getElementById('resetBtn');
+const soundBtn = document.getElementById('soundBtn');
+const statusEl = document.getElementById('status');
+const gridEl = document.getElementById('grid');
+const scoreEl = document.getElementById('score');
+const levelEl = document.getElementById('level');
+
+const leftBtn = document.getElementById('leftBtn');
+const rightBtn = document.getElementById('rightBtn');
+const rotateBtn = document.getElementById('rotateBtn');
+const downBtn = document.getElementById('downBtn');
+const hardDropBtn = document.getElementById('hardDropBtn');
+
+const mLeft = document.getElementById('mLeft');
+const mRight = document.getElementById('mRight');
+const mUp = document.getElementById('mUp');
+const mDown = document.getElementById('mDown');
+const mRotate = document.getElementById('mRotate');
+
+/* Grid config */
+const COLS = 10;
+const ROWS = 20;
+let cellSize = 0;
+let gridWidth = 420;
+
+/* Flags list (extensive) */
+const FLAGS = [
+ "af","al","dz","ad","ao","ar","am","au","at","az","bd","be","bz","ba","bw","br","bg","bf","bi","kh",
+ "cm","ca","cv","cl","cn","co","cr","hr","cu","cy","cz","cd","dk","dj","do","ec","eg","sv","ee","et",
+ "fi","fr","ga","ge","de","gh","gr","gt","ht","hn","hk","hu","is","in","id","ir","iq","ie","il","it",
+ "jp","jo","kz","ke","ki","kw","la","lv","lb","ls","lr","ly","lt","lu","mk","mg","mw","my","mv","ml",
+ "mt","mr","mu","mx","md","mn","me","ma","mz","mm","np","nl","nz","ni","ng","kp","no","om","pk","pa",
+ "pg","py","pe","ph","pl","pt","qa","ro","ru","rw","sa","sn","rs","sc","sl","sg","sk","si","sb","za",
+ "kr","es","lk","sd","se","ch","sy","tw","tj","tz","th","tl","tg","to","tt","tn","tr","tm","ug","ua",
+ "ae","uk","us","uy","uz","ve","vn","ye","zm","zw"
+];
+const FLAG_CACHE = {};
+function getFlag(code){
+  if(FLAG_CACHE[code]) return FLAG_CACHE[code];
+  const img = new Image();
+  img.src = `https://flagcdn.com/w80/${code}.png`;
+  img.onerror = ()=>{ FLAG_CACHE[code+'_err']=true; };
+  FLAG_CACHE[code]=img;
+  return img;
+}
+function randFlag(){ return FLAGS[Math.floor(Math.random()*FLAGS.length)]; }
+
+/* Tetris pieces (4x4 matrices for rotation convenience) */
+/* 1 = block, 0 = empty */
+const PIECES = {
+  I: [
+    [[0,0,0,0],
+     [1,1,1,1],
+     [0,0,0,0],
+     [0,0,0,0]]
+  ],
+  O: [
+    [[0,0,0,0],
+     [0,1,1,0],
+     [0,1,1,0],
+     [0,0,0,0]]
+  ],
+  T: [
+    [[0,0,0,0],
+     [0,1,0,0],
+     [1,1,1,0],
+     [0,0,0,0]]
+  ],
+  S: [
+    [[0,0,0,0],
+     [0,1,1,0],
+     [1,1,0,0],
+     [0,0,0,0]]
+  ],
+  Z: [
+    [[0,0,0,0],
+     [1,1,0,0],
+     [0,1,1,0],
+     [0,0,0,0]]
+  ],
+  J: [
+    [[0,0,0,0],
+     [1,0,0,0],
+     [1,1,1,0],
+     [0,0,0,0]]
+  ],
+  L: [
+    [[0,0,0,0],
+     [0,0,1,0],
+     [1,1,1,0],
+     [0,0,0,0]]
+  ]
+};
+// prepare rotations (0..3) for each piece
+function rotateMat(mat){
+  const N = mat.length;
+  const res = Array.from({length:N}, ()=>Array(N).fill(0));
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++) res[c][N-1-r] = mat[r][c];
+  return res;
+}
+const PIECE_ROTATIONS = {};
+for(const p in PIECES){
+  PIECE_ROTATIONS[p] = [];
+  let base = PIECES[p][0];
+  let cur = base;
+  for(let i=0;i<4;i++){
+    PIECE_ROTATIONS[p].push(cur);
+    cur = rotateMat(cur);
+  }
+}
+
+/* Grid model: grid[r][c] = null or {flag, domEl} */
+let grid = [];
+function createEmptyGrid(){
+  grid = Array.from({length: ROWS}, ()=> Array(COLS).fill(null));
+}
+
+/* DOM helpers */
+function resizeGrid(){
+  const wrap = document.getElementById('gridWrap');
+  const maxWidth = Math.min(520, wrap.clientWidth - 8);
+  gridWidth = maxWidth;
+  cellSize = Math.floor(gridWidth / COLS);
+  gridEl.style.width = (cellSize*COLS) + 'px';
+  gridEl.style.height = (cellSize*ROWS) + 'px';
+  gridEl.style.position = 'relative';
+  renderAll();
+}
+window.addEventListener('resize', resizeGrid);
+
+/* render a fixed cell at r,c from grid */
+function renderCell(r,c){
+  const val = grid[r][c];
+  const id = `cell-${r}-${c}`;
+  let el = document.getElementById(id);
+  if(val){
+    if(!el){
+      el = document.createElement('div');
+      el.id = id; el.className = 'cell';
+      el.style.position = 'absolute';
+      el.style.width = cellSize + 'px';
+      el.style.height = cellSize + 'px';
+      gridEl.appendChild(el);
+    }
+    el.style.left = (c*cellSize) + 'px';
+    el.style.top = (r*cellSize) + 'px';
+    el.style.borderRadius = (cellSize*0.06) + 'px';
+    const code = val.flag;
+    if(FLAG_CACHE[code+'_err']){
+      el.style.background = '#444';
+      el.textContent = code.toUpperCase();
+      el.style.color = '#fff';
+      el.style.fontSize = Math.max(10, Math.floor(cellSize*0.28)) + 'px';
+      el.style.display = 'flex';
+      el.style.alignItems = 'center';
+      el.style.justifyContent = 'center';
+    } else {
+      el.style.backgroundImage = `url(${getFlag(code).src})`;
+      el.textContent = '';
+      el.style.backgroundSize = 'cover';
+      el.style.display = '';
+    }
+    el.style.visibility = 'visible';
+  } else {
+    if(el) el.remove();
+  }
+}
+
+/* overlays for active piece */
+function removeActiveOverlay(){
+  const olds = gridEl.querySelectorAll('[id^="active-"]');
+  olds.forEach(e=>e.remove());
+}
+function drawActivePiece(piece){
+  removeActiveOverlay();
+  if(!piece) return;
+  const shape = piece.shape;
+  for(let r=0;r<shape.length;r++){
+    for(let c=0;c<shape[r].length;c++){
+      if(shape[r][c]){
+        const ar = piece.r + r;
+        const ac = piece.c + c;
+        const el = document.createElement('div');
+        el.id = `active-${r}-${c}`;
+        el.className = 'cell overlay';
+        el.style.width = cellSize + 'px';
+        el.style.height = cellSize + 'px';
+        el.style.left = (ac*cellSize) + 'px';
+        el.style.top = (ar*cellSize) + 'px';
+        el.style.borderRadius = (cellSize*0.06) + 'px';
+        const code = piece.flag;
+        if(FLAG_CACHE[code+'_err']){
+          el.style.background = '#666';
+          el.textContent = code.toUpperCase();
+          el.style.display = 'flex';
+          el.style.alignItems = 'center';
+          el.style.justifyContent = 'center';
+        } else {
+          el.style.backgroundImage = `url(${getFlag(code).src})`;
+          el.style.backgroundSize = 'cover';
+        }
+        gridEl.appendChild(el);
+      }
+    }
+  }
+}
+
+/* Utilities: collision check */
+function canPlace(shape, r, c){
+  for(let y=0;y<shape.length;y++){
+    for(let x=0;x<shape[y].length;x++){
+      if(shape[y][x]){
+        const nr = r + y;
+        const nc = c + x;
+        if(nc < 0 || nc >= COLS) return false;
+        if(nr >= ROWS) return false;
+        if(nr >= 0 && grid[nr][nc]) return false;
+      }
+    }
+  }
+  return true;
+}
+
+/* lock piece into grid with animation */
+function lockPiece(piece){
+  playBeep(220,0.06,'square',0.06);
+  const shape = piece.shape;
+  const toAdd = [];
+  for(let y=0;y<shape.length;y++){
+    for(let x=0;x<shape[y].length;x++){
+      if(shape[y][x]){
+        const nr = piece.r + y;
+        const nc = piece.c + x;
+        if(nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS){
+          grid[nr][nc] = { flag: piece.flag };
+          toAdd.push({r:nr,c:nc,flag:piece.flag});
+        }
+      }
+    }
+  }
+  // animate pop-in
+  toAdd.forEach(cell=>{
+    renderCell(cell.r,cell.c);
+    const el = document.getElementById(`cell-${cell.r}-${cell.c}`);
+    if(el) {
+      GSAP.set(el, {scale:0.2, opacity:0});
+      GSAP.to(el, {scale:1, opacity:1, duration:0.18, ease:"back.out(1.4)"});
+    }
+  });
+}
+
+/* clear full rows with animation */
+function clearFullRows(){
+  const fullRows = [];
+  for(let r=0;r<ROWS;r++){
+    if(grid[r].every(cell => cell !== null)) fullRows.push(r);
+  }
+  if(fullRows.length === 0) return 0;
+  // animate rows
+  fullRows.forEach((r, idx) => {
+    for(let c=0;c<COLS;c++){
+      const id = `cell-${r}-${c}`;
+      const el = document.getElementById(id);
+      if(el){
+        GSAP.to(el, {y: -20, opacity:0, scale:0.6, duration:0.3, delay: idx*0.05});
+      }
+    }
+  });
+  // after animation, remove rows and collapse
+  setTimeout(()=>{
+    // remove DOM for those rows
+    fullRows.sort((a,b)=>a-b);
+    for(let ri = fullRows.length -1; ri>=0; ri--){
+      const r = fullRows[ri];
+      grid.splice(r,1);
+      grid.unshift(Array(COLS).fill(null));
+    }
+    // re-render whole grid
+    removeAllCells();
+    for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) renderCell(r,c);
+  }, 380 + fullRows.length*30);
+  // sfx
+  playBeep(880,0.08,'sine',0.04);
+  return fullRows.length;
+}
+
+function removeAllCells(){
+  while(gridEl.firstChild) gridEl.removeChild(gridEl.firstChild);
+}
+
+/* Piece generation (random bag) */
+let bag = [];
+function refillBag(){
+  bag = Object.keys(PIECE_ROTATIONS).slice();
+  // shuffle
+  for(let i=bag.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [bag[i],bag[j]] = [bag[j],bag[i]];
+  }
+}
+function nextPiece(){ 
+  if(bag.length === 0) refillBag();
+  const type = bag.shift();
+  const rot = 0;
+  const shape = PIECE_ROTATIONS[type][rot];
+  const flag = randFlag();
+  // initial position: center horizontally, r = -topOffset
+  const topOffset = getTopOffset(shape);
+  const startR = -topOffset;
+  const startC = Math.floor((COLS - shape[0].length)/2);
+  return { type, rotation: rot, shape: shape, r: startR, c: startC, flag };
+}
+function rotatePiece(piece){
+  const rots = PIECE_ROTATIONS[piece.type];
+  const nextRot = (piece.rotation + 1) % rots.length;
+  const nextShape = rots[nextRot];
+  return { ...piece, rotation: nextRot, shape: nextShape };
+}
+function getTopOffset(shape){
+  for(let r=0;r<shape.length;r++){
+    if(shape[r].some(v=>v)) return r;
+  }
+  return 0;
+}
+
+/* Game state */
+let running = false;
+let paused = false;
+let mode = 'simple';
+let current = null;
+let ghost = null;
+let dropInterval = 700; // ms per step; decreases with level
+let dropAccumulator = 0;
+let lastTime = 0;
+let score = 0;
+let level = 1;
+
+/* Start / Pause / Reset */
+function startGame(){
+  if(!running) {
+    mode = modeSelect.value;
+    running = true; paused = false;
+    createEmptyGrid();
+    removeAllCells();
+    refillBag();
+    current = nextPiece();
+    score = 0; level = 1;
+    scoreEl.textContent = score; levelEl.textContent = level;
+    dropInterval = 700;
+    lastTime = performance.now();
+    statusEl.textContent = `در حال بازی: ${mode}`;
+    if(soundOn) try{ music.play(); }catch(e){}
+    requestAnimationFrame(loop);
+  } else {
+    // restart
+    resetGame();
+    startGame();
+  }
+}
+function pauseGame(){
+  if(!running) return;
+  paused = !paused;
+  if(!paused){
+    lastTime = performance.now();
+    requestAnimationFrame(loop);
+    statusEl.textContent = 'ادامه';
+  } else {
+    statusEl.textContent = 'متوقف';
+  }
+}
+function resetGame(){
+  running = false; paused = false;
+  createEmptyGrid();
+  removeAllCells();
+  current = null;
+  refillBag();
+  score = 0; level = 1;
+  scoreEl.textContent = score; levelEl.textContent = level;
+  try{ music.stop(); }catch(e){}
+  statusEl.textContent = 'آماده';
+}
+
+/* Drop & Lock logic */
+function hardDrop(){
+  if(!current) return;
+  while(true){
+    if(canPlace(current.shape, current.r+1, current.c)) current.r++;
+    else break;
+  }
+  lockAndNext();
+  playBeep(520,0.02,'square',0.06);
+}
+function softDrop(){
+  if(!current) return;
+  if(canPlace(current.shape, current.r+1, current.c)) {
+    current.r++;
+    score += 1;
+    scoreEl.textContent = score;
+    playBeep(400,0.02,'sine',0.02);
+  } else {
+    lockAndNext();
+  }
+}
+function moveLeft(){
+  if(!current) return;
+  if(canPlace(current.shape, current.r, current.c-1)){
+    current.c--;
+    playBeep(260,0.02,'sine',0.02);
+  }
+}
+function moveRight(){
+  if(!current) return;
+  if(canPlace(current.shape, current.r, current.c+1)){
+    current.c++;
+    playBeep(260,0.02,'sine',0.02);
+  }
+}
+function rotateCW(){
+  if(!current) return;
+  const rots = PIECE_ROTATIONS[current.type];
+  const nextRot = (current.rotation + 1) % rots.length;
+  const nextShape = rots[nextRot];
+  // try kicks: basic wall kick attempts
+  const kicks = [[0,0],[0,-1],[0,1],[-1,0],[1,0]];
+  for(const k of kicks){
+    const nr = current.r + k[0];
+    const nc = current.c + k[1];
+    if(canPlace(nextShape, nr, nc)){
+      current.rotation = nextRot;
+      current.shape = nextShape;
+      current.r = nr; current.c = nc;
+      playBeep(600,0.03,'triangle',0.03);
+      return;
+    }
+  }
+}
+
+/* lock current piece and spawn next */
+function lockAndNext(){
+  lockPiece(current);
+  const cleared = clearFullRows();
+  if(cleared > 0){
+    score += 100 * cleared;
+    level = Math.min(20, Math.floor(score/500) + 1);
+    dropInterval = Math.max(120, 700 - (level-1) * 30);
+    levelEl.textContent = level;
+    playBeep(900,0.12,'sine',0.05);
+  }
+  current = nextPiece();
+  // check immediate collision -> game over
+  if(!canPlace(current.shape, current.r, current.c)){
+    gameOver();
+  }
+}
+
+/* game over */
+function gameOver(){
+  running = false;
+  paused = false;
+  try{ music.stop(); }catch(e){}
+  statusEl.textContent = 'باخت';
+  playBeep(120,0.4,'sine',0.08);
+  setTimeout(()=> alert('باختی! دوباره تلاش کن.'), 50);
+}
+
+/* render all static cells and active piece */
+function renderAll(){
+  // render static grid
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) renderCell(r,c);
+  // render active piece overlay
+  drawActivePiece(current);
+}
+
+/* Game loop (requestAnimationFrame) */
+function loop(now){
+  if(!running || paused) return;
+  const dt = now - lastTime;
+  lastTime = now;
+  dropAccumulator += dt;
+  // step
+  if(dropAccumulator >= dropInterval){
+    dropAccumulator -= dropInterval;
+    if(mode === 'simple'){
+      if(canPlace(current.shape, current.r+1, current.c)){
+        current.r++;
+      } else {
+        lockAndNext();
+      }
+    } else if(mode === 'escape'){
+      // in escape: spawn and patterns settle into grid (simpler approach preserved from earlier)
+      // We'll reuse a simple escape logic: spawn horizontal patterns guaranteeing a hole
+      // For brevity we use a local spawn scheduler implemented below (escape-specific)
+      escapeTick();
+    }
+  }
+  renderAll();
+  requestAnimationFrame(loop);
+}
+
+/* =========================
+   Escape mode: patterns dropping (grid-based)
+   =========================*/
+let escapePatterns = [];
+let escapeSpawnAcc = 0;
+let escapeSpawnInterval = 1000;
+function spawnEscapePattern(){
+  // patterns generated like earlier, but we ensure at least one column hole
+  const t = Math.random();
+  const blocks = [];
+  if(t < 0.5){
+    // row with 1-2 holes
+    let holes = Math.random() < 0.7 ? 1 : 2;
+    const holeIdx = [];
+    while(holeIdx.length < holes){
+      const idx = Math.floor(Math.random()*COLS);
+      if(!holeIdx.includes(idx)) holeIdx.push(idx);
+    }
+    for(let c=0;c<COLS;c++){
+      if(!holeIdx.includes(c)) blocks.push({r: -1, c, flag: randFlag()});
+    }
+  } else if(t < 0.8){
+    // some columns
+    const cnt = 3 + Math.floor(Math.random()*3);
+    const cols = [];
+    while(cols.length < cnt){
+      const c = Math.floor(Math.random()*COLS);
+      if(!cols.includes(c)) cols.push(c);
+    }
+    cols.forEach(c=>{
+      const h = 1 + Math.floor(Math.random()*2);
+      for(let k=0;k<h;k++) blocks.push({r: -1 - k, c, flag: randFlag()});
+    });
+  } else {
+    // random single blocks
+    const cnt = 2 + Math.floor(Math.random()*4);
+    for(let i=0;i<cnt;i++){
+      const c = Math.floor(Math.random()*COLS);
+      blocks.push({r: -1 - Math.floor(Math.random()*3), c, flag: randFlag()});
+    }
+  }
+  // ensure at least one hole at settle: compute max fall
+  let maxFall = ROWS;
+  for(const b of blocks){
+    let fall = 0;
+    for(let r = b.r + 1; r < ROWS; r++)
