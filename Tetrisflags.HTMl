@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<title>Tetris Flags – Game Pack</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- GSAP -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+<!-- HOWLER (Sound – Telegram Safe) -->
+<script src="https://cdn.jsdelivr.net/npm/howler@2.2.4/dist/howler.min.js"></script>
+
+<style>
+body{
+  margin:0;
+  background:#070707;
+  color:#fff;
+  font-family:sans-serif;
+  text-align:center;
+}
+#menu button{
+  font-size:18px;
+  padding:12px 20px;
+  margin:10px;
+  border:none;
+  border-radius:10px;
+  background:#222;
+  color:#fff;
+}
+#game{
+  position:relative;
+  width:300px;
+  height:500px;
+  margin:0 auto;
+  background:#000;
+  overflow:hidden;
+  border:3px solid #fff;
+}
+.block{
+  position:absolute;
+  width:30px;
+  height:30px;
+}
+#player{
+  position:absolute;
+  bottom:10px;
+  left:135px;
+  width:30px;
+  height:40px;
+  background:#00ffcc;
+  border-radius:6px;
+}
+.controls{
+  margin:10px;
+}
+.controls button{
+  font-size:22px;
+  padding:10px 15px;
+}
+</style>
+</head>
+<body>
+
+<h2>🎮 Tetris Flags – Game Pack</h2>
+
+<div id="menu">
+  <button onclick="startTetris()">🧱 تتریس ساده</button>
+  <button onclick="startEscape()">🏃 فرار آدمک</button>
+</div>
+
+<div id="game"></div>
+
+<div class="controls">
+  <button onclick="moveLeft()">⬅️</button>
+  <button onclick="jump()">⬆️</button>
+  <button onclick="moveRight()">➡️</button>
+</div>
+
+<script>
+// ===== Sound =====
+const music = new Howl({
+  src:["https://archive.org/download/TetrisThemeMusic/Tetris.mp3"],
+  loop:true,
+  volume:0.5
+});
+
+// ===== Flags =====
+const flags=["ir","us","de","fr","jp","br","gb","it","es","tr"];
+const game=document.getElementById("game");
+let mode=null;
+let blocks=[];
+let player=null;
+let gravity=0;
+let jumping=false;
+
+// ===== Utils =====
+function randomFlag(){
+  return flags[Math.floor(Math.random()*flags.length)];
+}
+
+function createBlock(x,y){
+  const b=document.createElement("img");
+  b.src=`https://flagcdn.com/w40/${randomFlag()}.png`;
+  b.className="block";
+  b.style.left=x+"px";
+  b.style.top=y+"px";
+  game.appendChild(b);
+  blocks.push(b);
+
+  gsap.to(b,{
+    y:500,
+    duration:mode==="escape"?2:4,
+    ease:"linear",
+    onComplete:()=>b.remove()
+  });
+}
+
+// ===== MODE 1: TETRIS SIMPLE =====
+function startTetris(){
+  reset();
+  mode="tetris";
+  music.play();
+
+  setInterval(()=>{
+    for(let i=0;i<10;i++){
+      createBlock(i*30,-30);
+    }
+  },1200);
+}
+
+// ===== MODE 2: ESCAPE =====
+function startEscape(){
+  reset();
+  mode="escape";
+  music.play();
+
+  player=document.createElement("div");
+  player.id="player";
+  game.appendChild(player);
+
+  setInterval(()=>{
+    createBlock(Math.floor(Math.random()*10)*30,-30);
+  },600);
+
+  requestAnimationFrame(escapeLoop);
+}
+
+function escapeLoop(){
+  if(!player) return;
+
+  // gravity
+  if(jumping){
+    gravity+=1;
+    player.style.bottom=(parseInt(player.style.bottom)-gravity)+"px";
+    if(parseInt(player.style.bottom)<=10){
+      jumping=false;
+      gravity=0;
+      player.style.bottom="10px";
+    }
+  }
+
+  // collision
+  blocks.forEach(b=>{
+    const br=b.getBoundingClientRect();
+    const pr=player.getBoundingClientRect();
+    if(
+      br.left<pr.right &&
+      br.right>pr.left &&
+      br.bottom>pr.top &&
+      br.top<pr.bottom
+    ){
+      alert("💥 باختی!");
+      reset();
+    }
+  });
+
+  requestAnimationFrame(escapeLoop);
+}
+
+// ===== Controls =====
+function moveLeft(){
+  if(player){
+    player.style.left=Math.max(0,player.offsetLeft-30)+"px";
+  }
+}
+function moveRight(){
+  if(player){
+    player.style.left=Math.min(270,player.offsetLeft+30)+"px";
+  }
+}
+function jump(){
+  if(player && !jumping){
+    jumping=true;
+    gravity=-15;
+  }
+}
+
+// ===== Reset =====
+function reset(){
+  game.innerHTML="";
+  blocks=[];
+  player=null;
+  music.stop();
+}
+</script>
+
+</body>
+</html>
