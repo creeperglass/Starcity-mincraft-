@@ -1,40 +1,474 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-<meta charset="UTF-8">
-<title>Tetris Flags – Game Pack</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Tetris Flags — پیشرفته</title>
 
-<!-- GSAP -->
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-
-<!-- HOWLER (Sound – Telegram Safe) -->
+<!-- Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/howler@2.2.4/dist/howler.min.js"></script>
 
 <style>
-body{
-  margin:0;
-  background:#070707;
-  color:#fff;
-  font-family:sans-serif;
-  text-align:center;
+  :root{
+    --bg:#050505;
+    --panel:#0b0b0b;
+    --accent:#1db954;
+  }
+  html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family: Vazirmatn, system-ui, sans-serif;}
+  .wrap{display:flex;flex-direction:column;align-items:center;padding:12px;gap:10px;}
+  h1{margin:6px 0;font-size:18px}
+  #gameWrap{width:min(420px,92vw);max-width:420px;background:var(--panel);border-radius:12px;padding:10px;box-shadow:0 6px 24px rgba(0,0,0,.6);}
+  #game{position:relative;margin:0 auto;background:#000;border-radius:6px;overflow:hidden;touch-action:none;}
+  .ui{display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap;}
+  button{background:#222;border:none;color:#fff;padding:10px 12px;border-radius:8px;font-size:15px}
+  .small{padding:6px 8px;font-size:13px}
+  .score{font-size:14px;margin-left:8px}
+  /* responsive sizes */
+  @media (max-width:420px){
+    h1{font-size:16px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🎮 Tetris Flags — پیشرفته</h1>
+  <div id="gameWrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <div>
+        <select id="modeSelect" aria-label="mode">
+          <option value="simple">تتریس ساده (بارش پرچم)</option>
+          <option value="escape">فرار آدمک</option>
+        </select>
+        <span class="score" id="status">وضعیت: آماده</span>
+      </div>
+      <div>
+        <button id="startBtn">شروع</button>
+        <button id="pauseBtn" class="small">توقف</button>
+      </div>
+    </div>
+
+    <!-- بازی -->
+    <div id="game" style="width:100%;height:66vw;max-height:560px;"></div>
+
+    <div class="ui">
+      <button id="leftBtn">⬅️</button>
+      <button id="upBtn">⬆️</button>
+      <button id="rightBtn">➡️</button>
+      <button id="downBtn">⬇️</button>
+      <button id="soundToggle" class="small">🔊</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ====== تنظیمات و لود صدا ====== */
+const music = new Howl({ src: ["https://archive.org/download/TetrisThemeMusic/Tetris.mp3"], loop:true, volume:0.45 });
+let soundOn = true;
+
+/* ====== المان‌ها ====== */
+const gameEl = document.getElementById('game');
+const startBtn = document.getElementById('startBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+const modeSelect = document.getElementById('modeSelect');
+const statusEl = document.getElementById('status');
+const soundToggle = document.getElementById('soundToggle');
+
+/* ====== پارامترهای ریسپانسیو و گرید ====== */
+let GW, GH, COLS=10, blockSize;
+function resizeGame(){
+  // ارتفاع بر اساس عرض ظرف (نسبت قابل تغییر)
+  GW = gameEl.clientWidth;
+  GH = Math.min(Math.floor(GW*1.6), 560); // نسبت و حد بیشینه
+  gameEl.style.height = GH + 'px';
+  blockSize = GW / COLS;
 }
-#menu button{
-  font-size:18px;
-  padding:12px 20px;
-  margin:10px;
-  border:none;
-  border-radius:10px;
-  background:#222;
-  color:#fff;
+window.addEventListener('resize', resizeGame);
+resizeGame();
+
+/* ====== پرچم‌ها ====== */
+const FLAGS = ["ir","us","de","fr","jp","br","gb","it","es","tr","ca","au","kr"];
+const imgCache = {};
+function flagImg(code){
+  if(!imgCache[code]){
+    const img = new Image();
+    img.src = `https://flagcdn.com/w80/${code}.png`;
+    imgCache[code] = img;
+  }
+  return imgCache[code];
 }
-#game{
-  position:relative;
-  width:300px;
-  height:500px;
-  margin:0 auto;
-  background:#000;
-  overflow:hidden;
+function randFlag(){ return FLAGS[Math.floor(Math.random()*FLAGS.length)]; }
+
+/* ====== وضعیت کلی بازی ====== */
+let mode = 'simple'; // simple | escape
+let running = false;
+let paused = false;
+let lastTime = 0;
+let blocks = []; // آرایه آبجکت بلوک‌های افتان
+let player = null; // برای مد escape
+let spawnTimer = 0;
+let spawnInterval = 700; // میلی‌ثانیه
+let simpleFallSpeed = 90; // pixels per second
+let escapeFallBase = 160; // pixels per second
+let frameReq = null;
+let score = 0;
+
+/* ====== آبجکت بلوک ======
+{ id, x(px), y(px), w(px), h(px), flag(code), vy }
+=================================*/
+let idCounter = 1;
+function makeBlock(px, py, w, h, flag, vy){
+  const el = document.createElement('img');
+  el.draggable = false;
+  el.className = 'game-block';
+  el.style.position = 'absolute';
+  el.style.width = w + 'px';
+  el.style.height = h + 'px';
+  el.style.left = px + 'px';
+  el.style.top = py + 'px';
+  el.src = `https://flagcdn.com/w40/${flag}.png`;
+  gameEl.appendChild(el);
+  return { id: idCounter++, el, x:px, y:py, w, h, flag, vy };
+}
+
+/* ====== بازنشانی ====== */
+function resetGame(){
+  cancelAnimationFrame(frameReq);
+  blocks.forEach(b => b.el.remove());
+  blocks = [];
+  if(player && player.el) player.el.remove();
+  player = null;
+  idCounter = 1;
+  lastTime = 0;
+  spawnTimer = 0;
+  score = 0;
+  statusEl.textContent = 'وضعیت: آماده';
+}
+
+/* ====== شروع مود ها ====== */
+function start(){
+  mode = modeSelect.value;
+  resetGame();
+  resizeGame();
+  running = true;
+  paused = false;
+  if(soundOn) try{ music.play(); }catch(e){}
+  statusEl.textContent = `وضعیت: در حال بازی (${mode==="simple"?"تتریس ساده":"فرار آدمک"})`;
+  if(mode === 'simple'){
+    spawnInterval = 700;
+    simpleFallSpeed = Math.max(40, GW * 0.25); // px/s proportional
+    // تراز بندی؛ در مود ساده هر بلاک در یکی از 10 ستون
+  } else {
+    spawnInterval = 600;
+    escapeFallBase = Math.max(120, GW * 0.35);
+    createPlayer();
+  }
+  lastTime = performance.now();
+  frameReq = requestAnimationFrame(loop);
+}
+
+/* ====== مکانیسم تولید بلوک‌ها ====== */
+function spawnSimpleBlock(){
+  // یک بلوک تک در یکی از ستون‌ها
+  const col = Math.floor(Math.random() * COLS);
+  const px = col * blockSize;
+  const py = -blockSize;
+  const flag = randFlag();
+  const b = makeBlock(px, py, blockSize, blockSize, flag, simpleFallSpeed / 1000); // vy in px/ms
+  blocks.push(b);
+}
+
+function spawnEscapePattern(){
+  // الگوها با تضمین حداقل یک سوراخ
+  const patternType = Math.random();
+  if(patternType < 0.45){
+    // ردیف با 1-2 سوراخ: تولید مجموعه بلوک‌ها در هر ستون به جز جاهای خالی
+    let holes = Math.random() < 0.6 ? 1 : 2;
+    let holeIndexes = [];
+    while(holeIndexes.length < holes){
+      const idx = Math.floor(Math.random()*COLS);
+      if(!holeIndexes.includes(idx)) holeIndexes.push(idx);
+    }
+    for(let c=0;c<COLS;c++){
+      if(!holeIndexes.includes(c)){
+        const px = c*blockSize;
+        const py = -blockSize;
+        const flag = randFlag();
+        const b = makeBlock(px,py,blockSize,blockSize,flag,escapeFallBase/1000 + (Math.random()*40)/1000);
+        blocks.push(b);
+      }
+    }
+  } else if(patternType < 0.75){
+    // ستون‌های پراکنده (3-5 ستون)
+    const count = 3 + Math.floor(Math.random()*3);
+    let cols = [];
+    while(cols.length < count){
+      const c = Math.floor(Math.random()*COLS);
+      if(!cols.includes(c)) cols.push(c);
+    }
+    cols.forEach(c=>{
+      const px = c*blockSize;
+      const py = -blockSize - Math.random()*100;
+      const hMult = 1 + Math.floor(Math.random()*2); // گاهی دو ردیفه
+      for(let r=0;r<hMult;r++){
+        const flag = randFlag();
+        const b = makeBlock(px, py - r*blockSize, blockSize, blockSize, flag, (escapeFallBase + Math.random()*60)/1000);
+        blocks.push(b);
+      }
+    });
+  } else {
+    // چند تک بلوک تصادفی
+    const count = 2 + Math.floor(Math.random()*4);
+    for(let i=0;i<count;i++){
+      const c = Math.floor(Math.random()*COLS);
+      const px = c*blockSize;
+      const py = -blockSize - Math.random()*200;
+      const flag = randFlag();
+      const b = makeBlock(px,py,blockSize,blockSize,flag,(escapeFallBase + Math.random()*80)/1000);
+      blocks.push(b);
+    }
+  }
+}
+
+/* ====== ایجاد آدمک و فیزیکش ====== */
+function createPlayer(){
+  const el = document.createElement('div');
+  el.style.position='absolute';
+  el.style.width= blockSize + 'px';
+  el.style.height= Math.round(blockSize*1.2) + 'px';
+  el.style.left = Math.round((COLS/2 - 0.5) * blockSize) + 'px';
+  el.style.bottom = '6px';
+  el.style.background = '#1db954';
+  el.style.borderRadius = '6px';
+  el.style.display = 'flex';
+  el.style.alignItems = 'center';
+  el.style.justifyContent = 'center';
+  el.style.fontWeight='700';
+  el.textContent = '🙂';
+  gameEl.appendChild(el);
+  player = {
+    el,
+    x: parseFloat(el.style.left),
+    y: 6, // bottom
+    w: blockSize,
+    h: Math.round(blockSize*1.2),
+    vy: 0,
+    onGround: true
+  };
+}
+
+/* ====== کنترل‌ها ====== */
+function movePlayer(dx){
+  if(!player) return;
+  player.x = Math.max(0, Math.min(GW - player.w, player.x + dx));
+  player.el.style.left = player.x + 'px';
+}
+function playerJump(){
+  if(!player) return;
+  if(player.onGround){
+    player.vy = -13; // initial jump velocity (px/frame)
+    player.onGround = false;
+  }
+}
+
+/* ====== برخورد ==== */
+function rectsOverlap(a,b){
+  return !(a.left >= b.right || a.right <= b.left || a.top >= b.bottom || a.bottom <= b.top);
+}
+
+function checkCollisions(){
+  if(mode === 'escape' && player){
+    const pr = player.el.getBoundingClientRect();
+    const gwRect = gameEl.getBoundingClientRect();
+    // normalize block rects relative to viewport
+    for(const b of blocks){
+      const br = b.el.getBoundingClientRect();
+      if(rectsOverlap(pr, br)){
+        // برخورد! باخت
+        statusEl.textContent = 'باختی — برخورد شد';
+        running = false;
+        music.stop();
+        cancelAnimationFrame(frameReq);
+        alert('💥 باختی! دوباره تلاش کن.');
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+/* ====== لوپ اصلی ====== */
+function loop(now){
+  if(!running || paused) return;
+  const dt = Math.min(40, now - lastTime); // ms, clamp برای ثبات
+  lastTime = now;
+
+  // spawn کنترل
+  spawnTimer += dt;
+  if(spawnTimer >= spawnInterval){
+    spawnTimer = 0;
+    if(mode === 'simple') spawnSimpleBlock();
+    else spawnEscapePattern();
+  }
+
+  // حرکت بلوک‌ها
+  for(let i = blocks.length -1; i >=0; i--){
+    const b = blocks[i];
+    b.y += b.vy * dt; // vy in px/ms
+    if(b.y > GH + 50){
+      // حذف
+      b.el.remove();
+      blocks.splice(i,1);
+      if(mode === 'simple') score += 1;
+      continue;
+    }
+    b.el.style.top = b.y + 'px';
+  }
+
+  // مود ساده: امکان کنترل دستی جا به جایی ستون‌ها (بازیکن با دکمه‌ها ستون را جابجا می‌کند)
+  // در مود ساده کاربر ستون‌ها را با دکمه‌ها جابجا می‌کند: برای آسان شدن بازی،  
+  // هر فشار دکمه، بلوک‌هایی که هنوز نزدیک سطح بالا هستند می‌توانند جای خود را تغییر دهند.
+  // (برای تجربه ساده‌تر،‌ ما اجازه نمی‌دهیم بلوک‌های افتاده جابجا شوند.)
+  // — نسخه پایه: هیچ تغییر نیاز ندارد؛ بلوک‌ها فقط می‌افتند تا خودت بچینی.
+
+  // مود escape: فیزیک آدمک
+  if(mode === 'escape' && player){
+    // gravity (فرمول فریم‌بندی مستقل)
+    player.vy += 0.7; // gravity per frame
+    player.y += player.vy;
+    if(player.y >= 6){
+      player.y = 6;
+      player.vy = 0;
+      player.onGround = true;
+    } else {
+      player.onGround = false;
+    }
+    player.el.style.bottom = player.y + 'px';
+  }
+
+  // برخورد
+  if(checkCollisions()) return;
+
+  // به‌روزرسانی وضعیت (امتیاز)
+  if(mode === 'simple') statusEl.textContent = `امتیاز: ${score} — تتریس ساده`;
+  frameReq = requestAnimationFrame(loop);
+}
+
+/* ====== دکمه‌ها و کنترل‌ها ====== */
+startBtn.addEventListener('click', ()=>{
+  if(!running) start();
+  else { // restart
+    resetGame(); start();
+  }
+});
+pauseBtn.addEventListener('click', ()=>{
+  if(!running) return;
+  paused = !paused;
+  if(!paused){
+    lastTime = performance.now();
+    frameReq = requestAnimationFrame(loop);
+    statusEl.textContent = `ادامه — ${mode}`;
+  } else {
+    statusEl.textContent = `متوقف — ${mode}`;
+  }
+});
+
+document.getElementById('leftBtn').addEventListener('click', ()=> {
+  if(mode === 'escape') movePlayer(-blockSize);
+  else {
+    // در مود ساده: حرکت کند برای دستکاری بلوک‌های بالایی
+    // جابجایی آخرین بلوک ایجاد شده قبل از رسیدن به پایین (بسیار ساده)
+    if(blocks.length){
+      const topBlock = blocks[blocks.length-1];
+      topBlock.x = Math.max(0, topBlock.x - blockSize);
+      topBlock.el.style.left = topBlock.x + 'px';
+    }
+  }
+});
+document.getElementById('rightBtn').addEventListener('click', ()=> {
+  if(mode === 'escape') movePlayer(blockSize);
+  else {
+    if(blocks.length){
+      const topBlock = blocks[blocks.length-1];
+      topBlock.x = Math.min((COLS-1)*blockSize, topBlock.x + blockSize);
+      topBlock.el.style.left = topBlock.x + 'px';
+    }
+  }
+});
+document.getElementById('upBtn').addEventListener('click', ()=> {
+  if(mode === 'escape') playerJump();
+  else {
+    // در مود ساده می‌ذاریم دکمه بالا بلوک کنونی رو "سریع پایین" بندازه (soft drop)
+    if(blocks.length){
+      const topBlock = blocks[blocks.length-1];
+      topBlock.y += blockSize*2;
+      topBlock.el.style.top = topBlock.y + 'px';
+    }
+  }
+});
+document.getElementById('downBtn').addEventListener('click', ()=> {
+  if(mode === 'escape') playerJump();
+  else {
+    // نگه داشتن برای شتاب
+    if(blocks.length){
+      const topBlock = blocks[blocks.length-1];
+      topBlock.y += blockSize;
+      topBlock.el.style.top = topBlock.y + 'px';
+    }
+  }
+});
+
+/* کیبورد */
+window.addEventListener('keydown', (e) => {
+  if(e.key === 'ArrowLeft') document.getElementById('leftBtn').click();
+  if(e.key === 'ArrowRight') document.getElementById('rightBtn').click();
+  if(e.key === 'ArrowUp') document.getElementById('upBtn').click();
+  if(e.key === ' ') {
+    e.preventDefault();
+    document.getElementById('upBtn').click();
+  }
+});
+
+/* لمس سوایپ ساده (برای موبایل) */
+let touchStartX = null, touchStartY = null;
+gameEl.addEventListener('touchstart', (ev)=>{
+  if(ev.touches && ev.touches.length){
+    touchStartX = ev.touches[0].clientX;
+    touchStartY = ev.touches[0].clientY;
+  }
+}, {passive:true});
+gameEl.addEventListener('touchend', (ev)=>{
+  if(touchStartX === null) return;
+  const dx = (ev.changedTouches[0].clientX - touchStartX);
+  const dy = (ev.changedTouches[0].clientY - touchStartY);
+  if(Math.abs(dx) > Math.abs(dy)){
+    if(dx < -20) document.getElementById('leftBtn').click();
+    else if(dx > 20) document.getElementById('rightBtn').click();
+  } else {
+    if(dy < -40) document.getElementById('upBtn').click(); // swipe up -> jump
+    else if(dy > 40) document.getElementById('downBtn').click();
+  }
+  touchStartX = null;
+  touchStartY = null;
+}, {passive:true});
+
+/* صدا */
+soundToggle.addEventListener('click', ()=>{
+  soundOn = !soundOn;
+  if(soundOn) music.play();
+  else music.stop();
+  soundToggle.textContent = soundOn ? '🔊' : '🔈';
+});
+
+/* وقتی صفحه لود شد اندازه و محتوای اولیه را تنظیم کن */
+window.addEventListener('load', ()=>{
+  resizeGame();
+  statusEl.textContent = 'وضعیت: آماده';
+  // preload flag images
+  FLAGS.forEach(f => flagImg(f));
+});
+</script>
+</body>
+</html>  overflow:hidden;
   border:3px solid #fff;
 }
 .block{
