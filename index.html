@@ -12,7 +12,12 @@
 
 <link rel="icon" href="https://creeperglass.github.io/Starcity-mincraft-/Favicon.SVG" type="image/svg+xml">
 <link rel="canonical" href="https://creeperglass.github.io/Starcity-mincraft-/">
-    <link rel="about" href="https://creeperglass.github.io/Starcity-mincraft-/README">
+<link rel="about" href="https://creeperglass.github.io/Starcity-mincraft-/README">
+
+<link rel="image_src" href="https://s6.uupload.ir/files/file_000000004b5861f4be18d6c4dc94adde_(1)_fcj1.png" />
+<meta property="og:image" content="https://s6.uupload.ir/files/file_000000004b5861f4be18d6c4dc94adde_(1)_fcj1.png" />
+<meta name="twitter:card" content="summary_large_image" />
+
 <style>
 body {
     font-family: Tahoma, sans-serif;
@@ -65,8 +70,9 @@ a {
 /* منوی اپیزودها */
 .episode-menu {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 10px;
+    justify-content: center;
     margin-bottom: 20px;
 }
 .episode-menu button {
@@ -83,15 +89,8 @@ a {
     background-color: #0080ff;
 }
 .episode-content {
-    display: block; /* پیش‌فرض همه قسمت‌ها نمایش داده شوند */
+    display: none; /* در حالت پیش‌فرض مخفی تا با دکمه باز بشن */
     margin-bottom: 20px;
-}
-.episode-content.active {
-    display: block; /* قسمت فعال بعد از کلیک روی منو */
-    max-height: 500px; /* می‌توان عدد را تغییر داد */
-    overflow: auto;    /* اضافه شدن اسکرول در صورت نیاز */
-}
-    
 }
 .episode-content.active {
     display: block;
@@ -105,26 +104,15 @@ a {
     max-width: 700px;
     font-weight: bold;
     color: #ff4500;
-    
 }
-<!-- باکس جستجو -->
-<div style="margin-bottom:20px; text-align:center;">
-    <input type="search" placeholder="جستجو در قسمت‌ها..." style="padding:10px; width:80%; max-width:400px; border-radius:10px; border:1px solid #ccc;">
-</div>
-}
+input[type="search"]::placeholder { color: lime; }
+input::-webkit-input-placeholder { color: lime; }
+input:-moz-placeholder { color: lime; }
+input::-moz-placeholder { color: lime; }
+input:-ms-input-placeholder { color: lime; }
 
-/* اگر می‌خوای placeholder هم سبز باشه */
-input[type="search"]::placeholder {
-    color: lime; /* رنگ متن پیش‌فرض */
-}
-
-/* پیشوندها برای مرورگرهای مختلف */
-input::-webkit-input-placeholder { color: lime; } /* Chrome, Safari */
-input:-moz-placeholder { color: lime; } /* Firefox 18- */
-input::-moz-placeholder { color: lime; } /* Firefox 19+ */
-input:-ms-input-placeholder { color: lime; } /* IE 10+ */
-    .age-board {
-    background-color: #ffe4b5; /* رنگ تخته چوبی */
+.age-board {
+    background-color: #ffe4b5;
     border: 3px solid #8b4513;
     border-radius: 15px;
     padding: 15px;
@@ -133,31 +121,41 @@ input:-ms-input-placeholder { color: lime; } /* IE 10+ */
     text-align: center;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
-
 .age-board table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
 }
-
 .age-board th, .age-board td {
     border: 1px solid #8b4513;
     padding: 8px;
     font-weight: bold;
 }
+.age-board th { background-color: #deb887; }
+.age-board td { background-color: #fff8dc; }
 
-.age-board th {
-    background-color: #deb887;
+#characters {
+    padding: 20px;
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
 }
-
-.age-board td {
-    background-color: #fff8dc;
+.character-card {
+    background: #ffffffcc;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px #00000033;
+    max-width: 350px;
+    width: 100%;
+}
+.character-img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
 </style>
-
-<link rel="image_src" href="https://s6.uupload.ir/files/file_000000004b5861f4be18d6c4dc94adde_(1)_fcj1.png" />
-<meta property="og:image" content="https://s6.uupload.ir/files/file_000000004b5861f4be18d6c4dc94adde_(1)_fcj1.png" />
-<meta name="twitter:card" content="summary_large_image" />
 
 <script type="application/ld+json">
 {
@@ -170,12 +168,17 @@ input:-ms-input-placeholder { color: lime; } /* IE 10+ */
   "image": "https://s6.uupload.ir/files/file_000000004b5861f4be18d6c4dc94adde_(1)_fcj1.png"
 }
 </script>
-
 </head>
 <body>
-<h1>سریال استار سیتی - فصل اول</h1>
-<p>ساخته شده توسط من یعنی کریپر. این سریال دارای ۲۲ قسمت است که به زودی همگی در آپارات منتشر خواهند شد.</p>
-<p>برای اینکه صفحه کامل دانلود شود ۳۰ ثانیه صبر کنید و برای لود شدن بخش fast see ۱۰ ثانیه تا ۱ دقیقه صبر کنید.</p>
+
+<h1 style="text-align: center;">سریال استار سیتی - فصل اول</h1>
+<p style="text-align: center;">ساخته شده توسط من یعنی کریپر. این سریال دارای ۲۲ قسمت است که به زودی همگی در آپارات منتشر خواهند شد.</p>
+
+<!-- باکس جستجو -->
+<div style="margin-bottom:20px; text-align:center;">
+    <input type="search" placeholder="جستجو در قسمت‌ها..." style="padding:10px; width:80%; max-width:400px; border-radius:10px; border:1px solid #ccc;">
+</div>
+
 <!-- منوی اپیزودها -->
 <div class="episode-menu">
     <button onclick="showEpisode('ep1')">قسمت اول</button>
@@ -187,19 +190,21 @@ input:-ms-input-placeholder { color: lime; } /* IE 10+ */
     <button onclick="showEpisode('ep7')">قسمت هفتم</button>
     <button onclick="showEpisode('ep8')">قسمت هشتم</button>
     <button onclick="showEpisode('ep9')">قسمت نهم</button>
-  <button onclick="showEpisode('ep10')">قسمت دهم</button>
+    <button onclick="showEpisode('ep10')">قسمت دهم</button>
     <button onclick="showEpisode('ep11')">قسمت یازدهم</button>
     <button onclick="showEpisode('age')">رده بندی سنی</button>
     <button onclick="showEpisode('fast')">Fast see</button>
 </div>
-<div style="text-align:center; margin-top:50px;">
-    <div class="trailer-box">
-    <img src="https://creeperglass.github.io/Starcity-mincraft-/Favicon.SVG" alt="استارسیتی" style="width:100px; height:100px;">
-    <p style="font-size:24px; font-weight:bold;">استارسیتی</p>
+
+<div style="text-align:center; margin-top:20px;">
+    <div class="trailer-box" style="max-width: 700px; margin: 0 auto;">
+        <img src="https://creeperglass.github.io/Starcity-mincraft-/Favicon.SVG" alt="استارسیتی" style="width:100px; height:100px;">
+        <p style="font-size:24px; font-weight:bold;">استارسیتی</p>
+    </div>
 </div>
-</div>
+
 <!-- اپیزودها -->
-<div id="ep1" class="episode-content">
+<div id="ep1" class="episode-content active">
     <div class="episode">
         <a href="https://creeperglass.github.io/Starcity-mincraft-/README" style="color:blue; text-decoration:underline;">
 ⚠️مهم کلیک کنید و قبل از ورود حتما بخوانید لطفا روی اینجا کلیک کنید⚠️
@@ -214,8 +219,8 @@ input:-ms-input-placeholder { color: lime; } /* IE 10+ */
 <div id="ep2" class="episode-content">
     <div class="episode">
         <h2>قسمت دوم</h2>
-        <p>گلس من وارد مغازه‌ی آقای کاسمیر می‌شود و به بچه‌هایی که ویدیو را می‌بینند سلام می‌کند. سپس از مغازه خارج می‌شود و یک چست پر از وسایل چرت و پرت می‌بیند. آقای کاسمیر با لباس نو وارد مغازه می‌شود. گلس من دوباره وارد مغازه می‌شود و  به او تبریک  می‌گوید برای لباس نو و آقای کاسمیر یکی از سه ماشین جدیدش را رایگان به او می‌دهد یعنی به گلس من میگوید یکی از سه ماشین جدیدش را انتخاب کند تا مال خودش شود. گلس من بهترین را انتخاب می‌کند. ماشین پرنده است و با دو کلیدی که داده شده، چرخ‌ها صاف یا کج می‌شوند. گلس من با ماشین در شهر می‌گردد، تصادف می‌کند و کسی را می‌کشد. پلیس او را می‌گیرد و به زندان می‌اندازد. در زندان، با فردی روبرو می‌شود که می‌گوید پسر کسی است که گلس برایش کار می‌کند. با بازرسی برای شناختن آن فرد او را آزاد می‌کند، پلیس را می‌کشد و پسر آقای کاسمیر  به گلس من کتابی برای فرار می‌دهد. قسمت با برداشتن یک اسلحه‌ی بدون تیر توسط گلس من تمام می‌شود. 
-        این قسمت رده ی سنی + ۷ سال دارد!⚠️</p>
+        <p>گلس من وارد مغازه‌ی آقای کاسمیر می‌شود و به بچه‌هایی که ویدیو را می‌بینند سلام می‌کند. سپس از مغازه خارج می‌شود و یک چست پر از وسایل چرت و پرت می‌بیند. آقای کاسمیر با لباس نو وارد مغازه می‌شود. گلس من دوباره وارد مغازه می‌شود و به او تبریک می‌گوید برای لباس نو و آقای کاسمیر یکی از سه ماشین جدیدش را رایگان به او می‌دهد. ماشین پرنده است و...
+        این قسمت رده‌ی سنی +۷ سال دارد!⚠️</p>
         <a href="https://www.aparat.com/v/jvoqz2p" target="_blank">مشاهده قسمت دوم</a>
         <img src="https://s6.uupload.ir/files/inshot_20250727_014518858_9tiz.jpg" alt="قسمت دوم" class="thumbnail">
     </div>
@@ -224,7 +229,7 @@ input:-ms-input-placeholder { color: lime; } /* IE 10+ */
 <div id="ep3" class="episode-content">
     <div class="episode">
         <h2>قسمت سوم</h2>
-        <p>گلس من از پله های کلانتری پایین میرود و میبیند پلیسی نیست بجز راننده با اتوبوس پلیس که بیرون منتظرش است با اتوبوس پلیس به منطقه‌ای سبز برده می‌شود(که در اصل آنجا یک اردوگاه کار اجباری برای زندانی هاست)که تازه کشف شده. در آنجا طبق دستور نگهبان‌ها برف و علف‌های هرز را می‌کند و با اتوبوس بازمی‌گردد به کلانتری (پاسگاه) بازمی‌گردد ولی حواسش پرت می‌شود. راننده تهدید میکند برگرد به زندان گلس من گوش نمی‌دهد  سپس گلس من تفنگ بدون تیر قسمت دوم را در می آورد و راننده میگوید باشد غلط کردم میخوای اعتراف کنم راجب همه راجب اون پسره(پسر آقای کاسمیر رو میگوید)میخوای بدونی؟ اون مواد فروشه فقط فرار نکن اگر فرار کنی پلیس ها فردی رو می‌فرستن دنبالت اسمش تر....... در اینجا گلس من او را با تبر میکشد و برای همین صحبت راننده قطع میشود و راننده میمیرد(سوالی بدون جواب که آن تر که بوده)و گلس من بی توجه فرار میکند .🍻. به مغازه‌ی کاسمیر می‌رود آقای کاسمیر سرش شلوغ است و آدرس ماشین را  و آدرس یک فروشگاه در محله‌ی زامبی‌ها را می دهد برای دزدی بعدی ماشین که ماشین در همان محل است. آنجا زامبی ها او را بیهوش میکند و به بیمارستان منتقل می‌شود. دکتر گالم به او می‌گوید باید در محله ی زامبی بازی‌هایی انجام دهد و اشتباه باعث مرگ می‌شود قبلا چندین هزار نفر قبل تو اونجا بودن این محله بد نام هست شایعه شده فردی به اسم ندر استیو اینکارو میکنه و قطعی نیست و تو خوش شانس بودی که بیهوش شدی گلس من سوال میکند آیا میتوانم مرخص شوم دکتر گالم میگوید باید تا فردا صبر کنی. روز بعد گلس من با نقشه‌ای که دکتر گالم از محله ی زامبی ها داده از بیمارستان مرخص می شود</p>
+        <p>گلس من از پله‌های کلانتری پایین می‌رود و می‌بیند پلیسی نیست... </p>
         <a href="https://www.aparat.com/v/dsnkswt" target="_blank">مشاهده قسمت سوم</a>
         <img src="https://s6.uupload.ir/files/inshot_20250727_014632611_es9v.png" alt="قسمت سوم" class="thumbnail">
     </div>
@@ -233,7 +238,7 @@ input:-ms-input-placeholder { color: lime; } /* IE 10+ */
 <div id="ep4" class="episode-content">
     <div class="episode">
         <h2>قسمت چهارم</h2>
-        <p>گلس من از بیمارستان خارج می‌شود. پسر آقای کاسمیر با او تماس می‌گیرد و می‌گوید کسی در محله زامبی‌ها منتظرش است. گلس من آنجا با ندر استیو روبرو می‌شود بعد تعجب گلس من بعد مدتی که نزدیک او می‌رفت ندر استیو اکثرا درخواست میکرد که از پیش  او  برود.اتفاقات دیروز در ذهن ندر استیو به بیننده نشان داده میشود:ندر استیو تبلیغی از آقای کاسمیر دیده (آقای کاسمیر اشتباهی تبلیغ را پشت کرده)و قصد حمله به استار سیتی را دارد برای پول. ندر استیو میرود گلس من وارد مغازه ی محله ی زامبی ها که آنجا زندگی میکردند میشود کارکنان را میبیند که بستنی تولید می‌کنند و میفهمد اینجا  بستنی‌فروشی است که مشتری ندارد و کارکنان آن ویلیجر هستند یواشکی از ترس فردی که گلس من میفهمد ندر استیو هست وارد میشوند کارکنان می‌گویند ما برای تو کار خواهیم کرد. به ندر استیو پیام می‌دهد چرا مشتری ای وارد مغازه نمیشود و پاسخ می‌گیرد: «به تو ربطی ندارد». گلس من از مغازه خارج می‌شود و قسمت تمام می‌شود.</p>
+        <p>گلس من از بیمارستان خارج می‌شود. پسر آقای کاسمیر با او تماس می‌گیرد...</p>
         <a href="https://www.aparat.com/v/yjaxp96" target="_blank">مشاهده قسمت چهارم</a>
         <img src="https://s6.uupload.ir/files/inshot_20250727_014441941_hmmz.jpg" alt="قسمت چهارم" class="thumbnail">
     </div>
@@ -242,7 +247,7 @@ input:-ms-input-placeholder { color: lime; } /* IE 10+ */
 <div id="ep5" class="episode-content">
     <div class="episode">
         <h2>قسمت پنجم</h2>
-        <p>گلس من در خیابان قدم می‌زند و وارد ساختمانی با تابلوی اسپانیایی می‌شود. دختری ناشناس که خود را دانشمند معرفی می‌کند، از او می‌خواهد روی دستگاهی به نام Jackbox بپرد. گلس من این کار را نمی‌کند و فقط روی آن می‌ایستد، سپس مستقیماً روی تیغ می‌پرد. صدای زوزه‌ی گرگ پخش می‌شود و سپس در کنار بانک زمرد روی تخت بیدار می‌شود. آقای کاسمیر ظاهر می‌شود و به گلس پیشنهاد دزدی از بانک می‌دهد. ابتدا مخالفت می‌کند ولی با وعده‌ی حقوق بیشتر و اجازه برداشتن چند دایموند، قبول می‌کند. بعد از هک شدن دوربین‌ها، گلس وارد بانک شده، گالم نگهبان را می‌کشد و دایموندها را می‌دزدد. چون آقای کاسمیر را پیدا نمی‌کند، دایموندها را جدا کرده و با یکی از آن‌ها در دست، به سوی بستنی‌فروشی می‌رود.</p>
+        <p>گلس من در خیابان قدم می‌زند و وارد ساختمانی با تابلوی اسپانیایی می‌شود...</p>
         <a href="https://www.aparat.com/v/z57RYhA" target="_blank">مشاهده قسمت پنجم</a>
         <img src="https://s6.uupload.ir/files/inshot_20250720_200343832_dfau.jpg" alt="قسمت پنجم" class="thumbnail">
     </div>
@@ -251,408 +256,155 @@ input:-ms-input-placeholder { color: lime; } /* IE 10+ */
 <div id="ep6" class="episode-content">
     <div class="episode">
         <h2>قسمت ششم</h2>
-        <p>
-        در قسمت ششم اتفاق دیگری افتاد. گلس من به سمت بستنی‌فروشی حرکت می‌کنه و می‌بینه وسط راه یکی به گلدون به‌جای آب، سنگ داده و ادعا می‌کنه آب ریخته! گلس من عصبانی میشه. وقتی وارد بستنی‌فروشی میشه، پر از مشتریه و چند تا میز با بلاک سنگی کمی سبز ساخته شده. تعجب می‌کنه. وقتی میره سمت میز، دوتا ویلیجر می‌بینه. یکیشون میگه: «بستنی با طعم خاک ندر (Nether) می‌خوام.» گلس من قبول نمی‌کنه ولی قیف رو میده که خودش با خاک عادی درست کنه. ویلیجر بستنی رو می‌خوره، و معلوم میشه اون دوتا ویلیجر با هم اومدن خرید. یکی از ویلیجر ها که شخص دیگری بود می‌پرسه: «چرا اومدی اینجا؟» میگه: «اومدم لباس بخرم.» میره سمت اتاق دیگه‌ی مغازه، کلی ویلیجر اونجا صف کشیدن! گلس من تعجب می‌کنه و داد می‌زنه: «اینجا لباس‌فروشی نیست، گمشید بیرون!» قبول نمی‌کنن. یک ویلیجر میگه: «اگه بهم یک عدد الماس بدی، بهت چیز باارزش‌تر میدم.» گلس من قبول می‌کنه، ولی ویلیجر ذغال توی جیبش می‌ذاره! گلس من عصبانی میشه، میزنتش. یکی از کارکنان چون به بقیه نگفته بود کسی رو نیارن، اخراج میشه و گلس من هم خارج میشه. بعد به پدرش (یک گالم آهنی) میگه: «دیدی پسرتو زدم!» گالم عصبی میشه، دنبالش می‌افته. گلس من ناچار به یک کارخانه فرار می‌کنه، ولی می‌فهمه گالم آهنی رسیده. چون گالمه، نمی‌تونه در رو باز کنه و میگه: «جرأت داری بیا بیرون!» گلس من داخل کارخانه رو چک می‌کنه، خالیه. به یک آزمایشگاه هسته‌ای چسبیده. ویلیجرها تهدیدش می‌کنن: «اگه فرد دیگری آدرس اینجا رو بفهمه، می‌کشیمت!» مجبور میشه گوش بده و خارج شه. ولی گالم همونجاست، پس وارد کارخانه‌ی آب‌شیرین‌کن میشه که خالیه، و داخل آب‌ها می‌مونه تا گالم بره... و قسمت تمام میشه.
-        </p>
+        <p>در قسمت ششم اتفاق دیگری افتاد. گلس من به سمت بستنی‌فروشی حرکت می‌کنه...</p>
         <a href="https://www.aparat.com/v/hmogmjw" target="_blank">مشاهده قسمت ششم</a>
         <img src="https://s6.uupload.ir/files/inshot_20250726_175557974_76eg.jpg" alt="قسمت ششم" class="thumbnail">
     </div>
 </div>
-    <div id="ep7" class="episode-content">
+
+<div id="ep7" class="episode-content">
   <div class="episode">
     <h2>قسمت هفتم</h2>
-    <p>
-      ندر استیو تماس می‌گیرد و از گلس من می‌خواهد سریع به آدرسی بین دو خانه برود.  
-      گلس من در شب به محل می‌رسد. ندر استیو که پشتش به اوست، شنلش در باد تکان میخورد  آرام برمی‌گردد و می‌گوید: «بالاخره اومدی، خواستم چیز مهمی بهت بگم.»  
-      ناگهان ویلیجری ناشناس وارد می‌شود و خودش را <strong>چای‌خور جامعه</strong> معرفی می‌کند.  
-      او وانمود می‌کند چای آماده است، اما وقتی می‌خواهد آن را بریزد، می‌فهمد که در واقع آب جوش است و ناخواسته آن را روی گلس من و ندر استیو می‌ریزد.  
-      ندر استیو با mace او را می‌کشد و می‌گوید: «من کابوس شبت بودم... بعدی تویی!»  
-      گلس من با ترس خودش را به درون چاه پرت می‌کند.  
-      ⚠️ رده سنی: بالای ۸ سال
-    </p>   
-<a href="https://www.aparat.com/v/mmm78bv" target="_blank">🎬 مشاهده قسمت هفتم در آپارات</a>
+    <p>ندر استیو تماس می‌گیرد و از گلس من می‌خواهد سریع به آدرسی برود... ⚠️ رده سنی: بالای ۸ سال</p>   
+    <a href="https://www.aparat.com/v/mmm78bv" target="_blank">🎬 مشاهده قسمت هفتم در آپارات</a>
     <img src="https://s6.uupload.ir/files/file_00000000ccf86246b13f31369cda44aa_rh0z.png" alt="قسمت هفتم استارسیتی" class="thumbnail">
   </div>
-      <div id="ep8" class="episode-content">
+</div>
+
+<div id="ep8" class="episode-content">
     <div class="episode">
         <h2>قسمت هشتم</h2>
-        <p>
-        قسمت هشتم با مرور خاطره‌ای که ندر استیو چای‌خور جامعه را می‌کشد، شروع می‌شود و صفحه سیاه می‌شود و نوشته ..........؟؟ نمایش داده می‌شود.  
-        ناگهان صدای باران شنیده می‌شود و گلس من بالای برجی <strong>RiBiTy</strong> را می‌بیند. گلس من می‌گوید: «باورم نمی‌شود تویی!»  
-        ریبیتای پاسخ می‌دهد: «من می‌دانم تو توی چاه افتادی.» گلس من به هوش می‌آید و متوجه می‌شود ریبیتای یک رویا بود. او ریبیتای را صدا می‌زند اما اثری از او نمی‌بیند.  
-        گلس من در چاهی تاریک، باریک و جادار افتاده است. در ذهنش خاطره‌ای از چای‌خور جامعه پخش می‌شود که چای می‌خورد. گلس من زیر لب می‌گوید: «وای چه دیوانه‌ای بودی!» و تشنه می‌شود. او به یاد چایهای چای‌خور جامعه، کمی آب از چاه برمی‌دارد و می‌خورد.  
-        ناگهان حال گلس من بد می‌شود، استفراغ می‌کند و از هوش می‌رود.
-        </p>
+        <p>قسمت هشتم با مرور خاطره‌ای شروع می‌شود... </p>
         <a href="https://www.aparat.com/v/tsu1yrr" target="_blank">مشاهده قسمت هشتم</a>
         <img src="https://s6.uupload.ir/files/inshot_20251110_010312591_zvcw.jpg" alt="قسمت هشتم" class="thumbnail">
     </div>
+</div>
+
 <div id="ep9" class="episode-content">
   <div class="episode">
     <h2>قسمت نهم</h2>
-    <p>
-      در این قسمت گلس من در چاه به هوش می‌آید و می‌فهمد رویا نبوده و واقعاً اینجا بوده، پس وسایلش را بررسی می‌کند.  
-      نان خشک و تبرش را استفاده می‌کند و می‌گوید در را باز کنید، اما اتفاقی نمی‌افتد.  
-      گلس من با تبرش شن‌ها را می‌کند و بیرون می‌آید. تعجب می‌کند، کلی Glow Berry و شکل‌های عجیب می‌بیند و جلوتر می‌رود، با یک ویلیجر ناشناس مواجه می‌شود که مشخص نیست کیست و قسمت تمام می‌شود.
-      ⚠️ رده سنی: بالای ۸ سال
-    </p>
+    <p>در این قسمت گلس من در چاه به هوش می‌آید... ⚠️ رده سنی: بالای ۸ سال</p>
     <a href="https://www.aparat.com/v/ajyp3l9" target="_blank">🎬 مشاهده قسمت نهم در آپارات</a>
     <img src="https://s6.uupload.ir/files/67093379-3806-l_3559_ftq9.jpg" alt="قسمت نهم استارسیتی" class="thumbnail">
   </div>
 </div>
-          <div id="ep10" class="episode-content">
+
+<div id="ep10" class="episode-content">
     <div class="episode">
         <h2>قسمت دهم: خانه‌ی برگی</h2>
-        <p>
-        گلس من در فاضلاب با ویلیجر ناشناس روبرو می‌شود که خودش را وینستون معرفی می‌کند.  
-        وینستون داستانش را کوتاه می‌گوید و گلس من از او درباره‌ی گل ممد می‌پرسد.  
-        سپس به خانه‌ی برگین وینستون می‌روند، غذا می‌خورند، استراحت می‌کنند و داستان به آرامی ادامه پیدا می‌کند.
-        </p>
+        <p>گلس من در فاضلاب با ویلیجر ناشناس روبرو می‌شود...</p>
         <a href="https://www.aparat.com/v/ghim8ag" target="_blank">🎬 مشاهده قسمت دهم در آپارات</a>
         <img src="https://static.cdn.asset.aparat.cloud/avt/67099626-9344-l__6534.jpg?width=900&quality=90&secret=6wnM_hTfS0p1sRFQ2NBxTQ?123" alt="قسمت دهم استارسیتی" class="thumbnail">
     </div>
-          </div>
-          <!-- قسمت یازدهم -->
+</div>
+
 <div id="ep11" class="episode-content">
   <div class="episode">
     <h2>قسمت یازدهم</h2>
-
-    <p>در این قسمت گلس من از بیرون به خانه‌ی برگی نگاه می‌کند و می‌گوید: "یک ویلیجر هاوایی نشین، اونم توی چاه، عجب!" سپس وارد خانه می‌شود.</p>
-
-    <p>وینستون به او می‌گوید: "بیا، یک نوشیدنی آوردم حالت رو جا میاره." بعد به گلس من بطری‌ای نورانی با نوشیدنی زرد درون آن می‌دهد. گلس من با تعجب آن را می‌نوشد و وینستون می‌گوید: "ای وای خاک‌به‌سرم، لیوان‌ها رو قاطی کردم، اون چیز بود... دستشویی بود!"</p>
-
-    <p>گلس من با ناباوری حالش بد می‌شود و وینستون سریع به او معجون <em>health</em> می‌دهد و می‌گوید: "این را بخوری حالت خوب می‌شود." گلس من با بی‌اعتمادی بطری را سر می‌کشد، حالش بهتر می‌شود ولی استفراغ می‌کند.</p>
-
-    <p>گلس من می‌گوید: "چرا آن بطری را به من دادی؟" و وینستون خجالت‌زده می‌شود. در این هنگام گل ممد (گل الکس محمد) وارد خانه می‌شود. گلس من برای اولین بار او را می‌بیند و وینستون می‌گوید: "بفرما، دوست جدیدت هم رسید."</p>
-
-    <p>گلس من گفت: "این دیگه کیه؟" و وینستون گفت: "ای گل ممد هست." گل ممد دستش را دراز می‌کند و صدایی در می‌آورد. وینستون می‌گوید: "به نظر می‌آید می‌خواهد باهات دست بده." گلس من می‌گوید: "این که دستشویی نیست؟" و وینستون می‌گوید: "نه، نترس، این دست دوستی هست." سپس با هم دست می‌دهند.</p>
-
-    <p>گلس من از یخچال نان برمی‌دارد و به وینستون هم می‌دهد، سپس می‌خوابند. صبح بیدار می‌شوند و وینستون متوجه می‌شود گل ممد می‌خواهد به گلس من چیزی نشان دهد و می‌گوید: "دنبالش برو، انگار چیزی پیدا کرده."</p>
-
-    <p>گلس من داخل صندوق خانه یک نرده‌بان پیدا می‌کند و خوشحال می‌شود. با خداحافظی از وینستون و گل ممد می‌خواهد برود. وینستون به او می‌گوید: "قبل رفتنت، اگر شهردار با چیزی شدی، یادت باشه اینجا آسانسور بزنی. حال نداریم، یکم خوشحال باشیم."</p>
-
-    <p>گلس من به سمت یکی از درهای چاه می‌رود و نرده‌بان می‌زند. قسمت بلافاصله پس از خروج گلس من تمام می‌شود.</p>
-
+    <p>در این قسمت گلس من از بیرون به خانه‌ی برگی نگاه می‌کند...</p>
     <a href="https://www.aparat.com/v/ffsn779" target="_blank">مشاهده قسمت یازدهم! 🎬</a>
-    <img src="https://static.cdn.asset.aparat.cloud/avt/67526367-8625-l__1236.jpg?width=900&quality=90&secret=fitxOWfCQNq3MiMtDL0Okg?123" 
-         alt="قسمت یازدهم استارسیتی" 
-         class="thumbnail" 
-         loading="lazy"
-         style="max-width:100%; height:auto; display:block; margin-top:10px; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
+    <img src="https://static.cdn.asset.aparat.cloud/avt/67526367-8625-l__1236.jpg?width=900&quality=90&secret=fitxOWfCQNq3MiMtDL0Okg?123" alt="قسمت یازدهم استارسیتی" class="thumbnail">
   </div>
 </div>
-    
-    
-  </div>
+
+<!-- بخش رده بندی سنی -->
+<div id="age" class="episode-content">
+    <div class="age-board">
+      <h2>رده‌بندی سنی قسمت‌ها</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>قسمت</th>
+            <th>رده‌بندی سنی</th>
+            <th>دلیل</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>قسمت اول</td><td>+7</td><td>ماجراجویی ساده</td></tr>
+          <tr><td>قسمت دوم</td><td>+7</td><td>ماجراجویی ساده</td></tr>
+          <tr><td>قسمت سوم</td><td>+7</td><td>ماجراجویی ساده</td></tr>
+          <tr><td>قسمت چهارم</td><td>+7</td><td>ماجراجویی ساده</td></tr>
+          <tr><td>قسمت پنجم</td><td>+9</td><td>افکت ترسناک جزئی</td></tr>
+          <tr><td>قسمت ششم</td><td>+7</td><td>ماجراجویی ساده</td></tr>
+          <tr><td>قسمت هفتم</td><td>+8</td><td>صحنه‌های استرس‌زا و مرگ ناگهانی</td></tr>
+          <tr><td>قسمت هشتم</td><td>+9</td><td>استرس‌زا و تاریکی</td></tr>
+          <tr><td>قسمت نهم</td><td>+7</td><td>بدون ترس خاص</td></tr>
+        </tbody>
+      </table>
     </div>
-<div class="age-board">
-  <h2>رده‌بندی سنی قسمت‌ها</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>قسمت</th>
-        <th>رده‌بندی سنی</th>
-        <th>دلیل</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>قسمت اول</td>
-        <td>+7</td>
-        <td>تدوین ترسناک ندارد و یک ماجراجویی ساده است</td>
-      </tr>
-      <tr>
-        <td>قسمت دوم</td>
-        <td>+7</td>
-        <td>تدوین ترسناک ندارد و یک ماجراجویی ساده است</td>
-      </tr>
-      <tr>
-        <td>قسمت سوم</td>
-        <td>+7</td>
-        <td>تدوین ترسناک ندارد و یک ماجراجویی ساده است</td>
-      </tr>
-      <tr>
-        <td>قسمت چهارم</td>
-        <td>+7</td>
-        <td>تدوین ترسناک ندارد و یک ماجراجویی ساده است</td>
-      </tr>
-      <tr>
-        <td>قسمت پنجم</td>
-        <td>+9</td>
-        <td>این قسمت مثل بقیه قسمت ها در ماینکرافت اتفاق می افتد این قسمت فقط یک افکت ترسناک دارد که ممکن است برای همه مناسب نباشد البته خیلی ترسناک نیست</td>
-      </tr>
-      <tr>
-        <td>قسمت ششم</td>
-        <td>+7</td>
-        <td>تدوین ترسناک ندارد و یک ماجراجویی ساده است</td>
-      </tr>
-        <tr>
-  <td>قسمت هفتم</td>
-  <td>+8</td>
-  <td>این قسمت دارای صحنه‌های استرس‌زا و مرگ ناگهانی است</td>
-        </tr>
-        <tr>
-  <td>قسمت هشتم</td>
-  <td>+9</td>
-  <td>شامل صحنه‌های استرس‌زا، تاریکی و بیهوشی شخصیت است که ممکن است برای کودکان زیر ۹ سال مناسب نباشد</td>
-        </tr>
-          <td>قسمت نهم</td>
-  <td>+7</td>
-  <td>شامل ترس نباشد</td>
-  </tr>
-      
-    </tbody>
-  </table>
 </div>
+
 <!-- Fast See -->
 <div id="fast" class="episode-content">
     <div class="fast-see">
         <h2>Fast See</h2>
-        <!-- ویدیوهای واقعی هر قسمت -->
         <div id="fs-ep1"><script type="text/JavaScript" src="https://www.aparat.com/embed/eloy6dn?data[rnddiv]=fs-ep1&data[responsive]=yes&titleShow=true&recom=self"></script></div>
         <div id="fs-ep2"><script type="text/JavaScript" src="https://www.aparat.com/embed/jvoqz2p?data[rnddiv]=fs-ep2&data[responsive]=yes&titleShow=true&recom=self"></script></div>
         <div id="fs-ep3"><script type="text/JavaScript" src="https://www.aparat.com/embed/dsnkswt?data[rnddiv]=fs-ep3&data[responsive]=yes&titleShow=true&recom=self"></script></div>
         <div id="fs-ep4"><script type="text/JavaScript" src="https://www.aparat.com/embed/yjaxp96?data[rnddiv]=fs-ep4&data[responsive]=yes&titleShow=true&recom=self"></script></div>
-        <div id="90839924997"><script type="text/JavaScript" src="https://www.aparat.com/embed/qfy34m9?data[rnddiv]=90839924997&data[responsive]=yes&titleShow=true&recom=self"></script></div>
         <div id="fs-ep6"><script type="text/JavaScript" src="https://www.aparat.com/embed/hmogmjw?data[rnddiv]=fs-ep6&data[responsive]=yes&titleShow=true&recom=self"></script></div>
-        <div id="fs-ep7"><script type="text/JavaScript" src="https://www.aparat.com/embed/mmm78bv?data[rnddiv]=fs-ep7&data[responsive]=yes&titleShow=true&recom=self"></script>
-        <div id="fs-ep8"><script type="text/JavaScript" src="https://www.aparat.com/embed/tsu1yrr?data[rnddiv]=fs-ep8&data[responsive]=yes&titleShow=true&recom=self"></script>
-            div id="fs-ep10">
-    <div id="27654626285"><script type="text/JavaScript" src="https://www.aparat.com/embed/ghim8ag?data[rnddiv]=27654626285&data[responsive]=yes&titleShow=true&recom=self"></script>
-    </div>
-        </div>
-            
-        </div>
-        </div>
+        <div id="fs-ep7"><script type="text/JavaScript" src="https://www.aparat.com/embed/mmm78bv?data[rnddiv]=fs-ep7&data[responsive]=yes&titleShow=true&recom=self"></script></div>
+        <div id="fs-ep8"><script type="text/JavaScript" src="https://www.aparat.com/embed/tsu1yrr?data[rnddiv]=fs-ep8&data[responsive]=yes&titleShow=true&recom=self"></script></div>
+        <div id="fs-ep10"><script type="text/JavaScript" src="https://www.aparat.com/embed/ghim8ag?data[rnddiv]=fs-ep10&data[responsive]=yes&titleShow=true&recom=self"></script></div>
     </div>
 </div>
-<!-- بخش کاراکترها (قرار می‌گیرد بین fast see و تریلر) --><section id="characters">
-  <h2>بخش کاراکترها</h2>  <!-- یک کاراکتر نمونه -->  <div class="character-card">
+
+<!-- بخش کاراکترها -->
+<h2 style="text-align: center; margin-top: 40px;">بخش کاراکترها</h2>
+<section id="characters">
+  <div class="character-card">
     <img src="https://s6.uupload.ir/files/inshot_20251122_012023692_zp15.jpg" alt="گلس‌من" class="character-img" />
     <h3>گلس‌من-glass man</h3>
-    <p><strong>بیوگرافی:</strong> مردی شیشه‌ای که برای آقای کاسمیر کار می‌کند. او در استارسیتی به دنیا آمد اما این شهر به مرور زمان تغییر کرد.</p>
+    <p><strong>بیوگرافی:</strong> مردی شیشه‌ای که برای آقای کاسمیر کار می‌کند.</p>
     <p><strong>شغل:</strong> کارکن آقای کاسمیر</p>
   </div>
   <div class="character-card">
     <img src="https://s6.uupload.ir/files/inshot_20251124_184921607_b0wh.jpg" alt="املاک تیندا" class="character-img" />
     <h3>املاکی تیندا-tenda Real Estate</h3>
-    <p><strong>بیوگرافی:</strong> او یک املاکی هست یعنی خانه میفروشد در قسمت اول به گلس من خانه ی سبز فروخت.</p>
-    <p><strong>املاکی:</strong> املاکی.</p>
+    <p><strong>بیوگرافی:</strong> او یک املاکی هست که خانه می‌فروشد.</p>
+    <p><strong>شغل:</strong> املاکی</p>
   </div>
-    <div class="character-card">
-  <img src="https://s6.uupload.ir/files/images_-_2025-11-24t183031.476_djaq.jpeg" alt="آقای کاسمیر" class="character-img" />
-  <h3>آقای کاسمیر-mr casmir</h3>
-  <p><strong>بیوگرافی:</strong> صاحب نمایشگاه ماشین و شخصیت مهم شهر استارسیتی که گلس‌من برای او کار می‌کند. او همیشه برنامه‌ها و نقشه‌های خود را دنبال می‌کند و نقش کلیدی در ماجراهای شهر دارد. او ندر استیو را به اشتباه انداخت و باعث شد او فکر کند پولی برای حمله به استارسیتی می‌گیرد.</p>
-  <p><strong>شغل:</strong> پولدار شهر / ماشین فروش (صاحب نمایشگاه ماشین)</p>
-  <p><em>حسی که بعد از گرفتن این عکس داشت: افتخار و رضایت از موقعیتش</em></p>
-    </div>
-    <div class="character-card">
-  <img src="https://s6.uupload.ir/files/nether_steve_nova_skin_elements_r8ix.jpg" alt="ندر استیو" class="character-img" />
-  <h3>ندر استیو-nether steve</h3>
-  <p><strong>بیوگرافی:</strong>  ندر استیو شخصیتی مرموز و آشفته است که به دنبال نابودی و برهم‌زدن نظم استارسیتی است. او در نتیجهٔ سوءتفاهم‌ها و برنامه‌های پنهانی دست به اقداماتی زده که شهر را به خطر انداخته و باعث رخدادهای خشنی در شهر شده است. او به دنبال گرفتن پول از کاسمیر است چون تبلیغ شوخی را واقعی فرض کرده البته طبیعی هم هست چون بدون هیچ توضیحی کسی از ایسنتاگرام ویدیو را به سمت شبکه ی برفراز nether برده</p>
-  <p><strong>شغل:</strong> پادشاه ندرستان</p>
-  <p><strong>کانال:</strong> <a href="https://www.aparat.com/Steveeee626" target="_blank">Aparat: Steveeee626</a></p>
-    </div>
-    <div class="character-card">
-  <img src="https://s6.uupload.ir/files/inshot_20251124_185844775_chb7.jpg" alt="پسر آقای کاسمیر" class="character-img" />
-  <h3>پسر آقای کاسمیر-son of the mr casmir/Camérin casmir</h3>
-  <p><strong>بیوگرافی:</strong> نام کاملش کمرین(ملقب به کیمرا) کاسمیر است. پسر آقای کاسمیر نقش مهمی در داستان دارد و صحبت‌هایش سریع و گاهی مبهم هستند. او و گلس‌من به یکدیگر کمک می‌کنند و در جریان ماجراهای استارسیتی نقش پررنگی دارند.</p>
-  <p><strong>شغل:</strong> مواد فروش</p>
-    </div>
-    <div class="character-card">
-  <img src="https://s6.uupload.ir/files/images_-_2025-11-24t190648.571_k788.jpeg" alt="زامبی‌ها" class="character-img" />
-  <h3>زامبی‌ها-zombies</h3>
-  <p><strong>بیوگرافی:</strong> زامبی موجوداتی هستند که در محله‌ی زامبی‌ها سابق که امروزه به بستنی‌فروشی گلس‌من تبدیل شده زندگی می‌کردند. آن‌ها مردم را به چالش‌هایی می‌کشاندند که هیچ‌کس از آن‌ها زنده بیرون نیامده بود. شایعه شده هم ارباب آن‌ها ندر استیو بوده و هم قاتلشان، اما این‌ها هنوز شایعه هستند.</p>
-  <p><strong>شغل:</strong> چالشگر / بیکار</p>
-    </div>
-    <div class="character-card">
-  <img src="https://s6.uupload.ir/files/inshot_20251124_191234379_yo2u.jpg" alt="دکتر گالم" class="character-img" />
-  <h3>دکتر گالم-dr.golem</h3>
-  <p><strong>بیوگرافی:</strong> دکتر بیمارستانِ استارسیتی که گلس‌من را بعد از بیهوشی درمان کرد. دکتر گالم گلس‌من را از خطرات «محلهٔ زامبی‌ها» آگاه کرد، نقشه‌ای به او داد و هشدار داد بازی‌ها در آن محله مرگ‌آور است — هشدارها و راهنمایی‌های او در ادامهٔ ماجرا اهمیت پیدا می‌کند. او یکی از افرادی است که از گلس‌من محافظت می‌کند.</p>
-  <p><strong>شغل:</strong> دکتر</p>
-    </div>
-    <div class="character-card">
-  <img src="https://s6.uupload.ir/files/inshot_20251125_003009848_k58y.jpg" alt="RiBiTy" class="character-img" />
-  <h3> The RiBiTy</h3>
-  <p><strong>بیوگرافی:</strong> یک یوتیوبر ایرانی افسانه‌ای ماینکرافت است که در خواب گلس‌من می‌آید و او را خیلی دوستانه راهنمایی می‌کند.</p>
-  <p><strong>کانال:</strong> <a href="https://www.youtube.com/@TheRiBiTy" target="_blank">https://www.youtube.com/@TheRiBiTy</a></p>
-    </div>
-    <div class="character-card">
-  <img src="https://s6.uupload.ir/files/inshot_20251125_004011844_q4xj.jpg" alt="وینستون" class="character-img" />
-  <h3>وینستون-Winston</h3>
-  <p><strong>بیوگرافی:</strong> ویلیجری ناشناس بود که گلس من او را در چاه پیدا کرد. او به گلس من کمک کرد و پناه داد و داستان زندگی‌اش را تعریف کرد. وینستون بسیار ساده‌دل است.</p>
-  <p><strong>شغل:</strong> کمک‌رسان / دوست گلس من</p>
-    </div>
-    <div class="character-card">
-  <img src="https://s6.uupload.ir/files/inshot_20251125_004730963_7r3d.jpg" alt="چای‌خور جامعه" class="character-img" />
-  <h3>چای‌خور جامعه-the public tea drinker</h3>
-  <p><strong>بیوگرافی:</strong> ویلیجری عاشق چای که در وسط ملاقات ندر استیو می‌پرد و سعی در درست کردن چای دارد. او نمی‌تواند تشخیص دهد که چای است یا آب جوش. شایعاتی وجود دارد که می‌گویند ندر استیو او را روانی کرده و می‌گویند روی مردم و جامعه چای می‌ریزد. او وقتی ندر استیو پرید و محکم mace را در سرش کوبید، مرد.</p>
-  <p><strong>شغل:</strong> چای‌خور (ویلیجر ناشناس)</p>
-    </div>
-    <div class="character-card">
-  <img src="https://s6.uupload.ir/files/inshot_20251223_215759963_gzh1.jpg" alt="گل الکس محمد" class="character-img" />
-  <h3>گل الکس محمد - Gol Alex Mohamed</h3>
-  <p><strong>بیوگرافی:</strong> گل الکس محمد یک Allay است که در کنار ویلیجر هاوایی‌نشین قدیمی، یا همان گوینستون، زندگی می‌کند. او دوست صمیمی وینستون است و همراه او به درون چاه افتاد. این موجود صمیمی و مفید است و می‌تواند در ماجراها کمک‌کننده باشد.</p>
-  <p><strong>ویژگی‌ها:</strong> دوست‌داشتنی، مهربان، مفید، دارای توتم در دست</p>
-  <p><strong>رنگ و ظاهر:</strong> آبی روشن با بال‌های نورانی</p>
-        <p><strong>شغل:</strong> همراه و کمک‌رسان وینستون</p>
-    </div>
+  <div class="character-card">
+    <img src="https://s6.uupload.ir/files/images_-_2025-11-24t183031.476_djaq.jpeg" alt="آقای کاسمیر" class="character-img" />
+    <h3>آقای کاسمیر-mr casmir</h3>
+    <p><strong>بیوگرافی:</strong> صاحب نمایشگاه ماشین و شخصیت مهم شهر.</p>
+    <p><strong>شغل:</strong> ماشین فروش / پولدار شهر</p>
+  </div>
+</section>
 
-</section><style>
-  #characters {
-    padding: 20px;
-    margin-top: 30px;
-  }
+<!-- تریلر و نظرات -->
+<div class="trailer-box" style="max-width: 700px; margin: 30px auto;">
+    <h2>تریلر فصل دوم</h2>
+    <p>فصل دوم این سریال در راه است! منتظر ادامه ماجراهای هیجان‌انگیز گلس من باشید...</p>
+    <p><strong>فصل دوم به زودی منتشر می‌شود⚡</strong></p>
+    <p style="text-align: center; color: #FF4500; font-size: 18px; margin-top: 20px;">
+      به‌جز سریال، به‌زودی سرور استارسیتی برای ماینکرافت جاوا راه‌اندازی می‌شود.
+    </p>
+    <p style="text-align:center; font-weight:bold; color:#FF4500; font-size:16px;">
+        ⚠️ دیدگاه‌ها و نظرات کاربران در زیر همینجا نمایش داده می‌شوند ⚠️
+    </p>
 
-  .character-card {
-    background: #ffffffcc;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px #00000033;
-    margin-bottom: 20px;
-    max-width: 350px;
-  }
+    <script src="https://utteranc.es/client.js"
+            repo="creeperglass/Starcity-mincraft-"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+</div>
 
-  .character-img {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 10px;
-  }
-</style>
 <script>
 function showEpisode(id) {
     const episodes = document.querySelectorAll('.episode-content');
     episodes.forEach(ep => {
         if(ep.id === id) {
             ep.classList.add('active'); 
-            ep.style.maxHeight = "500px"; 
-            ep.style.overflow = "auto";  
         } else {
             ep.classList.remove('active');
-            ep.style.maxHeight = "none"; 
-            ep.style.overflow = "visible";
         }
     });
 }
-    <!-- JSON-LD VideoObjects: paste this BEFORE the closing </body> -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "VideoObject",
-      "name": "استارسیتی - قسمت ۱",
-      "description": "قسمت اول سریال استارسیتی ساخته کریپر",
-      "thumbnailUrl": "https://s6.uupload.ir/files/inshot_20250727_011917806_604.jpg",
-      "uploadDate": "2025-01-26",
-      "duration": "PT6M20S",
-      "contentUrl": "https://www.aparat.com/v/eloy6dn",
-      "embedUrl": "https://www.aparat.com/embed/eloy6dn"
-    },
-    {
-      "@type": "VideoObject",
-      "name": "استارسیتی - قسمت ۲",
-      "description": "قسمت دوم سریال استارسیتی",
-      "thumbnailUrl": "https://s6.uupload.ir/files/inshot_20250727_014518858_9tiz.jpg",
-      "uploadDate": "2025-02-17",
-      "duration": "PT7M10S",
-      "contentUrl": "https://www.aparat.com/v/jvoqz2p",
-      "embedUrl": "https://www.aparat.com/embed/jvoqz2p"
-    },
-    {
-      "@type": "VideoObject",
-      "name": "استارسیتی - قسمت ۳",
-      "description": "قسمت سوم سریال استارسیتی",
-      "thumbnailUrl": "https://s6.uupload.ir/files/inshot_20250727_014632611_es9v.png",
-      "uploadDate": "2025-02-20",
-      "duration": "PT5M45S",
-      "contentUrl": "https://www.aparat.com/v/dsnkswt",
-      "embedUrl": "https://www.aparat.com/embed/dsnkswt"
-    },
-    {
-      "@type": "VideoObject",
-      "name": "استارسیتی - قسمت ۴",
-      "description": "قسمت چهارم سریال استارسیتی",
-      "thumbnailUrl": "https://s6.uupload.ir/files/inshot_20250727_014441941_hmmz.jpg",
-      "uploadDate": "2025-04-23",
-      "duration": "PT6M50S",
-      "contentUrl": "https://www.aparat.com/v/yjaxp96",
-      "embedUrl": "https://www.aparat.com/embed/yjaxp96"
-    },
-    {
-      "@type": "VideoObject",
-      "name": "استارسیتی - قسمت ۵",
-      "description": "قسمت پنجم سریال استارسیتی",
-      "thumbnailUrl": "https://s6.uupload.ir/files/inshot_20250720_200343832_dfau.jpg",
-      "uploadDate": "2025-07-20",
-      "duration": "PT8M15S",
-      "contentUrl": "https://www.aparat.com/v/z57RYhA",
-      "embedUrl": "https://www.aparat.com/embed/z57RYhA"
-    },
-    {
-      "@type": "VideoObject",
-      "name": "استارسیتی - قسمت ۶",
-      "description": "قسمت ششم سریال استارسیتی",
-      "thumbnailUrl": "https://s6.uupload.ir/files/inshot_20250726_175557974_76eg.jpg",
-      "uploadDate": "2025-07-26",
-      "duration": "PT7M40S",
-      "contentUrl": "https://www.aparat.com/v/hmogmjw",
-      "embedUrl": "https://www.aparat.com/embed/hmogmjw"
-        
-    }
-  ]
-    {
-  "@type": "VideoObject",
-  "name": "استارسیتی - قسمت ۷",
-  "description": "قسمت هفتم سریال استارسیتی ساخته کریپر",
-  "thumbnailUrl": "https://s6.uupload.ir/files/file_00000000ccf86246b13f31369cda44aa_rh0z.png",
-  "uploadDate": "2025-11-06",
-  "duration": "PT1H36M",
-  "contentUrl": "https://www.aparat.com/v/mmm78bv",
-  "embedUrl": "https://www.aparat.com/embed/mmm78bv"
-        }
-}
-    <script type="application/ld+json">
-{
-  "@type": "VideoObject",
-  "name": "استارسیتی - قسمت ۸",
-  "description": "قسمت هشتم سریال استارسیتی ساخته کریپر. گلس من در چاهی تاریک گرفتار می‌شود و با خاطره‌ای از چای‌خور جامعه روبه‌رو می‌شود.",
-  "thumbnailUrl": "https://s6.uupload.ir/files/inshot_20251110_010312591_zvcw.jpg",
-  "uploadDate": "2025-11-10",
-  "duration": "PT8M20S",
-  "contentUrl": "https://www.aparat.com/v/tsu1yrr",
-  "embedUrl": "https://www.aparat.com/embed/tsu1yrr"
-}
-</script>
-</script>
 </script>
 
-</body>
-</html>
-</div>
-
-</div>
-<div class="trailer-box">
-    <h2>تریلر فصل دوم</h2>
-    <p>فصل دوم این سریال در راه است! منتظر ادامه ماجراهای هیجان‌انگیز گلس من باشید...</p>
-    <p><strong>فصل دوم به زودی منتشر# می‌شود</strong></p>
-    <!-- این کد را در انتهای <body> سایتت قرار بده -->
-<p style="text-align: center; color: #FF4500; font-size: 18px; margin-top: 50px;">
-  به‌جز سریال، به‌زودی سرور استارسیتی برای ماینکرافت جاوا راه‌اندازی می‌شود.
-</p>
-    <!-- متن هشدار بالای کامنت‌ها -->
-<p style="text-align:center; font-weight:bold; color:#FF4500; font-size:16px;">
-    ⚠️ دیدگاه‌ها و نظرات کاربران در زیر همینجا نمایش داده می‌شوند ⚠️
-</p>
-
-<!-- Utterances Comments -->
-<script src="https://utteranc.es/client.js"
-        repo="creeperglass/Starcity-mincraft-"
-        issue-term="pathname"
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
-</script>
-</div>
-🟢
 </body>
 </html>
