@@ -4,407 +4,71 @@
 <meta charset="UTF-8">
 <meta name="google-site-verification" content="yohbmlzSq9f9oGjE80YIg8S6V5lmkdRPyz202UhE00s" />
 <title>سریال استارسیتی | ماینکرافتی ساخته کریپر</title>
-<meta name="description" content="سریال استارسیتی یک داستان ماینکرافتی ساخته کریپر است. این سایت شامل قسمت‌ها، اخبار، تریلرها، گلس من و بقیه اطلاعات سریال می‌باشد.">
-<meta name="keywords" content="ماینکرافت, سریال استارسیتی, کریپر, ماینکرافت فارسی, داستان ماینکرافت, ویدیو ماینکرافت, گلس من, آپارات">
+<meta name="description" content="سریال استارسیتی یک داستان ماینکرافتی ساخته کریپر است. این سایت شامل قسمت‌ها، اخبار، تریلر و معرفی شخصیت‌هاست.">
+<meta name="keywords" content="ماینکرافت, سریال استارسیتی, کریپر, ماینکرافت فارسی, داستان ماینکرافت, ویدیو ماینکرافت, گلس من">
 <meta name="author" content="کریپر">
 <meta name="robots" content="index, follow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <link rel="icon" href="https://creeperglass.github.io/Starcity-mincraft-/Favicon.SVG" type="image/svg+xml">
 <link rel="canonical" href="https://creeperglass.github.io/Starcity-mincraft-/">
 <link rel="about" href="https://creeperglass.github.io/Starcity-mincraft-/README">
-
 <link rel="image_src" href="https://s6.uupload.ir/files/file_000000004b5861f4be18d6c4dc94adde_(1)_fcj1.png" />
 <meta property="og:image" content="https://s6.uupload.ir/files/file_000000004b5861f4be18d6c4dc94adde_(1)_fcj1.png" />
 <meta name="twitter:card" content="summary_large_image" />
-
 <style>
-body {
-    font-family: Tahoma, sans-serif;
-    background: repeating-linear-gradient(45deg, #7fff00 0, #f7f7f7 10px, #e2e2e2 20px);
-    direction: rtl;
-    padding: 20px;
-    margin: 0;
-}
-h1, h2 {
-    color: #444;
-}
-a {
-    color: #0057aa;
-    text-decoration: none;
-    font-weight: bold;
-}
-.episode {
-    background-color: cyan;
-    border-radius: 15px;
-    padding: 15px;
-    margin: 20px auto;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    max-width: 700px;
-}
-.thumbnail {
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 10px;
-}
-.trailer-box {
-    background-color: #d9f3ff;
-    border-radius: 15px;
-    padding: 15px;
-    text-align: center;
-    margin-top: 30px;
-}
-.rainbow-text {
-    font-weight: bold;
-    background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet, red);
-    background-size: 1400% 1400%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: rainbowAnimation 10s ease infinite;
-}
-@keyframes rainbowAnimation {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-/* منوی اپیزودها */
-.episode-menu {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-.episode-menu button {
-    padding: 10px 15px;
-    background-color: #00bfff;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.episode-menu button:hover {
-    background-color: #0080ff;
-}
-.episode-content {
-    display: none; /* در حالت پیش‌فرض مخفی تا با دکمه باز بشن */
-    margin-bottom: 20px;
-}
-.episode-content.active {
-    display: block;
-}
-.fast-see {
-    background-color: #fffae6;
-    border-radius: 10px;
-    padding: 15px;
-    margin: 20px auto;
-    text-align: center;
-    max-width: 700px;
-    font-weight: bold;
-    color: #ff4500;
-}
-input[type="search"]::placeholder { color: lime; }
-input::-webkit-input-placeholder { color: lime; }
-input:-moz-placeholder { color: lime; }
-input::-moz-placeholder { color: lime; }
-input:-ms-input-placeholder { color: lime; }
-
-.age-board {
-    background-color: #ffe4b5;
-    border: 3px solid #8b4513;
-    border-radius: 15px;
-    padding: 15px;
-    max-width: 700px;
-    margin: 20px auto;
-    text-align: center;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-}
-.age-board table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-.age-board th, .age-board td {
-    border: 1px solid #8b4513;
-    padding: 8px;
-    font-weight: bold;
-}
-.age-board th { background-color: #deb887; }
-.age-board td { background-color: #fff8dc; }
-
-#characters {
-    padding: 20px;
-    margin-top: 30px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-.character-card {
-    background: #ffffffcc;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px #00000033;
-    max-width: 350px;
-    width: 100%;
-}
-.character-img {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
+body { font-family: Tahoma, sans-serif; background: repeating-linear-gradient(45deg, #7fff00 0, #f7f7f7 10px, #e2e2e2 20px); direction: rtl; padding: 20px; margin: 0; }
+h1, h2 { color: #444; }
+a { color: #0057aa; text-decoration: none; font-weight: bold; }
+.episode { background-color: cyan; border-radius: 15px; padding: 15px; margin: 20px auto; box-shadow: 0 0 10px rgba(0,0,0,0.2); max-width: 700px; }
+.thumbnail { width: 100%; border-radius: 10px; margin-top: 10px; }
+.trailer-box { background-color: #d9f3ff; border-radius: 15px; padding: 15px; text-align: center; margin-top: 30px; }
+.episode-menu { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px; }
+.episode-menu button { padding: 10px 15px; background-color: #00bfff; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+.episode-menu button:hover { background-color: #0080ff; }
+.episode-content { display: none; margin-bottom: 20px; }
+.episode-content.active { display: block; }
+.fast-see { background-color: #fffae6; border-radius: 10px; padding: 15px; margin: 20px auto; text-align: center; max-width: 700px; font-weight: bold; color: #ff4500; }
+input[type="search"]::placeholder, input::-webkit-input-placeholder, input:-moz-placeholder, input::-moz-placeholder, input:-ms-input-placeholder { color: lime; }
+.age-board { background-color: #ffe4b5; border: 3px solid #8b4513; border-radius: 15px; padding: 15px; max-width: 700px; margin: 20px auto; text-align: center; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+.age-board table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.age-board th, .age-board td { border: 1px solid #8b4513; padding: 8px; font-weight: bold; }
+.age-board th { background-color: #deb887; } .age-board td { background-color: #fff8dc; }
+#characters { padding: 20px; margin-top: 30px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+.character-card { background: #ffffffcc; padding: 15px; border-radius: 12px; box-shadow: 0 0 10px #00000033; max-width: 350px; width: 100%; }
+.character-img { width: 100%; border-radius: 10px; margin-bottom: 10px; }
 </style>
-
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "TVSeries",
-  "name": "سریال استارسیتی",
-  "description": "سریال استارسیتی یک داستان ماینکرافتی ساخته کریپر است.",
-  "creator": { "@type": "Person", "name": "کریپر" },
-  "url": "https://creeperglass.github.io/Starcity-mincraft-/index.html",
-  "image": "https://s6.uupload.ir/files/file_000000004b5861f4be18d6c4dc94adde_(1)_fcj1.png"
-}
+{"@context":"https://schema.org","@type":"TVSeries","name":"سریال استارسیتی","description":"سریال استارسیتی یک داستان ماینکرافتی ساخته کریپر است.","creator":{"@type":"Person","name":"کریپر"},"url":"https://creeperglass.github.io/Starcity-mincraft-/index.html","image":"https://s6.uupload.ir/files/file_000000004b5861f4be18d6c4dc94adde_(1)_fcj1.png"}
 </script>
 </head>
 <body>
-
 <h1 style="text-align: center;">سریال استار سیتی - فصل اول</h1>
 <p style="text-align: center;">ساخته شده توسط من یعنی کریپر. این سریال دارای ۲۲ قسمت است که به زودی همگی در آپارات منتشر خواهند شد.</p>
-
-<!-- باکس جستجو -->
-<div style="margin-bottom:20px; text-align:center;">
-    <input type="search" placeholder="جستجو در قسمت‌ها..." style="padding:10px; width:80%; max-width:400px; border-radius:10px; border:1px solid #ccc;">
-</div>
-
-<!-- منوی اپیزودها -->
+<div style="margin-bottom:20px; text-align:center;"><input type="search" placeholder="جستجو در قسمت‌ها..." style="padding:10px; width:80%; max-width:400px; border-radius:10px; border:1px solid #ccc;"></div>
 <div class="episode-menu">
-    <button onclick="showEpisode('ep1')">قسمت اول</button>
-    <button onclick="showEpisode('ep2')">قسمت دوم</button>
-    <button onclick="showEpisode('ep3')">قسمت سوم</button>
-    <button onclick="showEpisode('ep4')">قسمت چهارم</button>
-    <button onclick="showEpisode('ep5')">قسمت پنجم</button>
-    <button onclick="showEpisode('ep6')">قسمت ششم</button>
-    <button onclick="showEpisode('ep7')">قسمت هفتم</button>
-    <button onclick="showEpisode('ep8')">قسمت هشتم</button>
-    <button onclick="showEpisode('ep9')">قسمت نهم</button>
-    <button onclick="showEpisode('ep10')">قسمت دهم</button>
-    <button onclick="showEpisode('ep11')">قسمت یازدهم</button>
-    <button onclick="showEpisode('age')">رده بندی سنی</button>
-    <button onclick="showEpisode('fast')">Fast see</button>
+<button onclick="showEpisode('ep1')">قسمت اول</button><button onclick="showEpisode('ep2')">قسمت دوم</button><button onclick="showEpisode('ep3')">قسمت سوم</button><button onclick="showEpisode('ep4')">قسمت چهارم</button><button onclick="showEpisode('ep5')">قسمت پنجم</button><button onclick="showEpisode('ep6')">قسمت ششم</button><button onclick="showEpisode('ep7')">قسمت هفتم</button><button onclick="showEpisode('ep8')">قسمت هشتم</button><button onclick="showEpisode('ep9')">قسمت نهم</button><button onclick="showEpisode('ep10')">قسمت دهم</button><button onclick="showEpisode('ep11')">قسمت یازدهم</button><button onclick="showEpisode('age')">رده بندی سنی</button><button onclick="showEpisode('fast')">Fast see</button>
 </div>
-
-<div style="text-align:center; margin-top:20px;">
-    <div class="trailer-box" style="max-width: 700px; margin: 0 auto;">
-        <img src="https://creeperglass.github.io/Starcity-mincraft-/Favicon.SVG" alt="استارسیتی" style="width:100px; height:100px;">
-        <p style="font-size:24px; font-weight:bold;">استارسیتی</p>
-    </div>
-</div>
-
-<!-- اپیزودها -->
-<div id="ep1" class="episode-content active">
-    <div class="episode">
-        <a href="https://creeperglass.github.io/Starcity-mincraft-/README" style="color:blue; text-decoration:underline;">
-⚠️مهم کلیک کنید و قبل از ورود حتما بخوانید لطفا روی اینجا کلیک کنید⚠️
-        </a>
-        <h2>قسمت اول</h2>
-        <p>گلس من وارد شهر می‌شود و می‌بیند املاکی نیست. وقتی املاکی برمی‌گردد، خانه‌ی سبز را از او می‌خرد و وسایل اولیه مثل تخت و میز و صندلی ناهارخوری را از مغازه‌ای دیگر می‌خرد. هنگام گشت و گذار در شهر، آقای کاسمیر به او پیشنهاد می‌دهد که برایش ماشین ببرد و در ازای آن ۱۰ هزار دلار می‌دهد. گلس من از مبلغ تعجب می‌کند و یک آیفون ۱۳ پرومکس می‌خرد. آقای کاسمیر آدرس یک ماشین آبی را برایش می‌فرستد، گلس من شیشه‌اش را می‌شکند و ماشین را برای او می‌برد.</p>
-        <a href="https://www.aparat.com/v/eloy6dn" target="_blank">مشاهده قسمت اول</a>
-        <img src="https://s6.uupload.ir/files/inshot_20250727_011917806_604.jpg" alt="قسمت اول" class="thumbnail">
-    </div>
-</div>
-
-<div id="ep2" class="episode-content">
-    <div class="episode">
-        <h2>قسمت دوم</h2>
-        <p>گلس من وارد مغازه‌ی آقای کاسمیر می‌شود و به بچه‌هایی که ویدیو را می‌بینند سلام می‌کند. سپس از مغازه خارج می‌شود و یک چست پر از وسایل چرت و پرت می‌بیند. آقای کاسمیر با لباس نو وارد مغازه می‌شود. گلس من دوباره وارد مغازه می‌شود و به او تبریک می‌گوید برای لباس نو و آقای کاسمیر یکی از سه ماشین جدیدش را رایگان به او می‌دهد. ماشین پرنده است و...
-        این قسمت رده‌ی سنی +۷ سال دارد!⚠️</p>
-        <a href="https://www.aparat.com/v/jvoqz2p" target="_blank">مشاهده قسمت دوم</a>
-        <img src="https://s6.uupload.ir/files/inshot_20250727_014518858_9tiz.jpg" alt="قسمت دوم" class="thumbnail">
-    </div>
-</div>
-
-<div id="ep3" class="episode-content">
-    <div class="episode">
-        <h2>قسمت سوم</h2>
-        <p>گلس من از پله‌های کلانتری پایین می‌رود و می‌بیند پلیسی نیست... </p>
-        <a href="https://www.aparat.com/v/dsnkswt" target="_blank">مشاهده قسمت سوم</a>
-        <img src="https://s6.uupload.ir/files/inshot_20250727_014632611_es9v.png" alt="قسمت سوم" class="thumbnail">
-    </div>
-</div>
-
-<div id="ep4" class="episode-content">
-    <div class="episode">
-        <h2>قسمت چهارم</h2>
-        <p>گلس من از بیمارستان خارج می‌شود. پسر آقای کاسمیر با او تماس می‌گیرد...</p>
-        <a href="https://www.aparat.com/v/yjaxp96" target="_blank">مشاهده قسمت چهارم</a>
-        <img src="https://s6.uupload.ir/files/inshot_20250727_014441941_hmmz.jpg" alt="قسمت چهارم" class="thumbnail">
-    </div>
-</div>
-
-<div id="ep5" class="episode-content">
-    <div class="episode">
-        <h2>قسمت پنجم</h2>
-        <p>گلس من در خیابان قدم می‌زند و وارد ساختمانی با تابلوی اسپانیایی می‌شود...</p>
-        <a href="https://www.aparat.com/v/z57RYhA" target="_blank">مشاهده قسمت پنجم</a>
-        <img src="https://s6.uupload.ir/files/inshot_20250720_200343832_dfau.jpg" alt="قسمت پنجم" class="thumbnail">
-    </div>
-</div>
-
-<div id="ep6" class="episode-content">
-    <div class="episode">
-        <h2>قسمت ششم</h2>
-        <p>در قسمت ششم اتفاق دیگری افتاد. گلس من به سمت بستنی‌فروشی حرکت می‌کنه...</p>
-        <a href="https://www.aparat.com/v/hmogmjw" target="_blank">مشاهده قسمت ششم</a>
-        <img src="https://s6.uupload.ir/files/inshot_20250726_175557974_76eg.jpg" alt="قسمت ششم" class="thumbnail">
-    </div>
-</div>
-
-<div id="ep7" class="episode-content">
-  <div class="episode">
-    <h2>قسمت هفتم</h2>
-    <p>ندر استیو تماس می‌گیرد و از گلس من می‌خواهد سریع به آدرسی برود... ⚠️ رده سنی: بالای ۸ سال</p>   
-    <a href="https://www.aparat.com/v/mmm78bv" target="_blank">🎬 مشاهده قسمت هفتم در آپارات</a>
-    <img src="https://s6.uupload.ir/files/file_00000000ccf86246b13f31369cda44aa_rh0z.png" alt="قسمت هفتم استارسیتی" class="thumbnail">
-  </div>
-</div>
-
-<div id="ep8" class="episode-content">
-    <div class="episode">
-        <h2>قسمت هشتم</h2>
-        <p>قسمت هشتم با مرور خاطره‌ای شروع می‌شود... </p>
-        <a href="https://www.aparat.com/v/tsu1yrr" target="_blank">مشاهده قسمت هشتم</a>
-        <img src="https://s6.uupload.ir/files/inshot_20251110_010312591_zvcw.jpg" alt="قسمت هشتم" class="thumbnail">
-    </div>
-</div>
-
-<div id="ep9" class="episode-content">
-  <div class="episode">
-    <h2>قسمت نهم</h2>
-    <p>در این قسمت گلس من در چاه به هوش می‌آید... ⚠️ رده سنی: بالای ۸ سال</p>
-    <a href="https://www.aparat.com/v/ajyp3l9" target="_blank">🎬 مشاهده قسمت نهم در آپارات</a>
-    <img src="https://s6.uupload.ir/files/67093379-3806-l_3559_ftq9.jpg" alt="قسمت نهم استارسیتی" class="thumbnail">
-  </div>
-</div>
-
-<div id="ep10" class="episode-content">
-    <div class="episode">
-        <h2>قسمت دهم: خانه‌ی برگی</h2>
-        <p>گلس من در فاضلاب با ویلیجر ناشناس روبرو می‌شود...</p>
-        <a href="https://www.aparat.com/v/ghim8ag" target="_blank">🎬 مشاهده قسمت دهم در آپارات</a>
-        <img src="https://static.cdn.asset.aparat.cloud/avt/67099626-9344-l__6534.jpg?width=900&quality=90&secret=6wnM_hTfS0p1sRFQ2NBxTQ?123" alt="قسمت دهم استارسیتی" class="thumbnail">
-    </div>
-</div>
-
-<div id="ep11" class="episode-content">
-  <div class="episode">
-    <h2>قسمت یازدهم</h2>
-    <p>در این قسمت گلس من از بیرون به خانه‌ی برگی نگاه می‌کند...</p>
-    <a href="https://www.aparat.com/v/ffsn779" target="_blank">مشاهده قسمت یازدهم! 🎬</a>
-    <img src="https://static.cdn.asset.aparat.cloud/avt/67526367-8625-l__1236.jpg?width=900&quality=90&secret=fitxOWfCQNq3MiMtDL0Okg?123" alt="قسمت یازدهم استارسیتی" class="thumbnail">
-  </div>
-</div>
-
-<!-- بخش رده بندی سنی -->
-<div id="age" class="episode-content">
-    <div class="age-board">
-      <h2>رده‌بندی سنی قسمت‌ها</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>قسمت</th>
-            <th>رده‌بندی سنی</th>
-            <th>دلیل</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>قسمت اول</td><td>+7</td><td>ماجراجویی ساده</td></tr>
-          <tr><td>قسمت دوم</td><td>+7</td><td>ماجراجویی ساده</td></tr>
-          <tr><td>قسمت سوم</td><td>+7</td><td>ماجراجویی ساده</td></tr>
-          <tr><td>قسمت چهارم</td><td>+7</td><td>ماجراجویی ساده</td></tr>
-          <tr><td>قسمت پنجم</td><td>+9</td><td>افکت ترسناک جزئی</td></tr>
-          <tr><td>قسمت ششم</td><td>+7</td><td>ماجراجویی ساده</td></tr>
-          <tr><td>قسمت هفتم</td><td>+8</td><td>صحنه‌های استرس‌زا و مرگ ناگهانی</td></tr>
-          <tr><td>قسمت هشتم</td><td>+9</td><td>استرس‌زا و تاریکی</td></tr>
-          <tr><td>قسمت نهم</td><td>+7</td><td>بدون ترس خاص</td></tr>
-        </tbody>
-      </table>
-    </div>
-</div>
-
-<!-- Fast See -->
-<div id="fast" class="episode-content">
-    <div class="fast-see">
-        <h2>Fast See</h2>
-        <div id="fs-ep1"><script type="text/JavaScript" src="https://www.aparat.com/embed/eloy6dn?data[rnddiv]=fs-ep1&data[responsive]=yes&titleShow=true&recom=self"></script></div>
-        <div id="fs-ep2"><script type="text/JavaScript" src="https://www.aparat.com/embed/jvoqz2p?data[rnddiv]=fs-ep2&data[responsive]=yes&titleShow=true&recom=self"></script></div>
-        <div id="fs-ep3"><script type="text/JavaScript" src="https://www.aparat.com/embed/dsnkswt?data[rnddiv]=fs-ep3&data[responsive]=yes&titleShow=true&recom=self"></script></div>
-        <div id="fs-ep4"><script type="text/JavaScript" src="https://www.aparat.com/embed/yjaxp96?data[rnddiv]=fs-ep4&data[responsive]=yes&titleShow=true&recom=self"></script></div>
-        <div id="fs-ep6"><script type="text/JavaScript" src="https://www.aparat.com/embed/hmogmjw?data[rnddiv]=fs-ep6&data[responsive]=yes&titleShow=true&recom=self"></script></div>
-        <div id="fs-ep7"><script type="text/JavaScript" src="https://www.aparat.com/embed/mmm78bv?data[rnddiv]=fs-ep7&data[responsive]=yes&titleShow=true&recom=self"></script></div>
-        <div id="fs-ep8"><script type="text/JavaScript" src="https://www.aparat.com/embed/tsu1yrr?data[rnddiv]=fs-ep8&data[responsive]=yes&titleShow=true&recom=self"></script></div>
-        <div id="fs-ep10"><script type="text/JavaScript" src="https://www.aparat.com/embed/ghim8ag?data[rnddiv]=fs-ep10&data[responsive]=yes&titleShow=true&recom=self"></script></div>
-    </div>
-</div>
-
-<!-- بخش کاراکترها -->
-<h2 style="text-align: center; margin-top: 40px;">بخش کاراکترها</h2>
-<section id="characters">
-  <div class="character-card">
-    <img src="https://s6.uupload.ir/files/inshot_20251122_012023692_zp15.jpg" alt="گلس‌من" class="character-img" />
-    <h3>گلس‌من-glass man</h3>
-    <p><strong>بیوگرافی:</strong> مردی شیشه‌ای که برای آقای کاسمیر کار می‌کند.</p>
-    <p><strong>شغل:</strong> کارکن آقای کاسمیر</p>
-  </div>
-  <div class="character-card">
-    <img src="https://s6.uupload.ir/files/inshot_20251124_184921607_b0wh.jpg" alt="املاک تیندا" class="character-img" />
-    <h3>املاکی تیندا-tenda Real Estate</h3>
-    <p><strong>بیوگرافی:</strong> او یک املاکی هست که خانه می‌فروشد.</p>
-    <p><strong>شغل:</strong> املاکی</p>
-  </div>
-  <div class="character-card">
-    <img src="https://s6.uupload.ir/files/images_-_2025-11-24t183031.476_djaq.jpeg" alt="آقای کاسمیر" class="character-img" />
-    <h3>آقای کاسمیر-mr casmir</h3>
-    <p><strong>بیوگرافی:</strong> صاحب نمایشگاه ماشین و شخصیت مهم شهر.</p>
-    <p><strong>شغل:</strong> ماشین فروش / پولدار شهر</p>
-  </div>
-</section>
-
-<!-- تریلر و نظرات -->
-<div class="trailer-box" style="max-width: 700px; margin: 30px auto;">
-    <h2>تریلر فصل دوم</h2>
-    <p>فصل دوم این سریال در راه است! منتظر ادامه ماجراهای هیجان‌انگیز گلس من باشید...</p>
-    <p><strong>فصل دوم به زودی منتشر می‌شود⚡</strong></p>
-    <p style="text-align: center; color: #FF4500; font-size: 18px; margin-top: 20px;">
-      به‌جز سریال، به‌زودی سرور استارسیتی برای ماینکرافت جاوا راه‌اندازی می‌شود.
-    </p>
-    <p style="text-align:center; font-weight:bold; color:#FF4500; font-size:16px;">
-        ⚠️ دیدگاه‌ها و نظرات کاربران در زیر همینجا نمایش داده می‌شوند ⚠️
-    </p>
-
-    <script src="https://utteranc.es/client.js"
-            repo="creeperglass/Starcity-mincraft-"
-            issue-term="pathname"
-            theme="github-light"
-            crossorigin="anonymous"
-            async>
-    </script>
-</div>
-
-<script>
-function showEpisode(id) {
-    const episodes = document.querySelectorAll('.episode-content');
-    episodes.forEach(ep => {
-        if(ep.id === id) {
-            ep.classList.add('active'); 
-        } else {
-            ep.classList.remove('active');
-        }
-    });
-}
-</script>
-
+<div style="text-align:center; margin-top:20px;"><div class="trailer-box" style="max-width:700px; margin:0 auto;"><img src="https://creeperglass.github.io/Starcity-mincraft-/Favicon.SVG" alt="استارسیتی" style="width:100px; height:100px;"><p style="font-size:24px; font-weight:bold;">استارسیتی</p></div></div>
+<div id="ep1" class="episode-content active"><div class="episode">
+<a href="https://creeperglass.github.io/Starcity-mincraft-/README" style="color:blue; text-decoration:underline;">⚠️مهم کلیک کنید و قبل از ورود حتما بخوانید لطفا روی اینجا کلیک کنید⚠️</a>
+<h2>قسمت اول</h2>
+<p>گلس من وارد شهر می‌شود و می‌بیند املاکی نیست. وقتی املاکی برمی‌گردد، خانه‌ی سبز را از او می‌خرد و وسایل اولیه مثل تخت و میز و صندلی ناهارخوری را از مغازه‌ای دیگر می‌خرد. هنگام گشت و گذار در شهر، آقای کاسمیر به او پیشنهاد می‌دهد که برایش ماشین ببرد و در ازای آن ۱۰ هزار دلار می‌دهد. گلس من از مبلغ تعجب می‌کند و یک آیفون ۱۳ پرومکس می‌خرد. آقای کاسمیر آدرس یک ماشین آبی را برایش می‌فرستد، گلس من شیشه‌اش را می‌شکند و ماشین را برای او می‌برد.</p>
+<a href="https://www.aparat.com/v/eloy6dn" target="_blank">مشاهده قسمت اول</a><img src="https://s6.uupload.ir/files/inshot_20250727_011917806_604.jpg" alt="قسمت اول" class="thumbnail">
+</div></div>
+<div id="ep2" class="episode-content"><div class="episode"><h2>قسمت دوم</h2><p>گلس من وارد مغازه‌ی آقای کاسمیر می‌شود و به بچه‌هایی که ویدیو را می‌بینند سلام می‌کند. سپس از مغازه خارج می‌شود و به سمت خانه برمی‌گردد... این قسمت رده‌ی سنی +۷ سال دارد!⚠️</p><a href="https://www.aparat.com/v/jvoqz2p" target="_blank">مشاهده قسمت دوم</a><img src="https://s6.uupload.ir/files/inshot_20250727_014518858_9tiz.jpg" alt="قسمت دوم" class="thumbnail"></div></div>
+<div id="ep3" class="episode-content"><div class="episode"><h2>قسمت سوم</h2><p>گلس من از پله‌های کلانتری پایین می‌رود و می‌بیند پلیسی نیست... </p><a href="https://www.aparat.com/v/dsnkswt" target="_blank">مشاهده قسمت سوم</a><img src="https://s6.uupload.ir/files/inshot_20250727_014632611_es9v.png" alt="قسمت سوم" class="thumbnail"></div></div>
+<div id="ep4" class="episode-content"><div class="episode"><h2>قسمت چهارم</h2><p>گلس من از بیمارستان خارج می‌شود. پسر آقای کاسمیر با او تماس می‌گیرد...</p><a href="https://www.aparat.com/v/yjaxp96" target="_blank">مشاهده قسمت چهارم</a><img src="https://s6.uupload.ir/files/inshot_20250727_014441941_hmmz.jpg" alt="قسمت چهارم" class="thumbnail"></div></div>
+<div id="ep5" class="episode-content"><div class="episode"><h2>قسمت پنجم</h2><p>گلس من در خیابان قدم می‌زند و وارد ساختمانی با تابلوی اسپانیایی می‌شود...</p><a href="https://www.aparat.com/v/z57RYhA" target="_blank">مشاهده قسمت پنجم</a><img src="https://s6.uupload.ir/files/inshot_20250720_200343832_dfau.jpg" alt="قسمت پنجم" class="thumbnail"></div></div>
+<div id="ep6" class="episode-content"><div class="episode"><h2>قسمت ششم</h2><p>در قسمت ششم اتفاق دیگری افتاد. گلس من به سمت بستنی‌فروشی حرکت می‌کنه...</p><a href="https://www.aparat.com/v/hmogmjw" target="_blank">مشاهده قسمت ششم</a><img src="https://s6.uupload.ir/files/inshot_20250726_175557974_76eg.jpg" alt="قسمت ششم" class="thumbnail"></div></div>
+<div id="ep7" class="episode-content"><div class="episode"><h2>قسمت هفتم</h2><p>ندر استیو تماس می‌گیرد و از گلس من می‌خواهد سریع به آدرسی برود... ⚠️ رده سنی: بالای ۸ سال</p><a href="https://www.aparat.com/v/mmm78bv" target="_blank">🎬 مشاهده قسمت هفتم در آپارات</a><img src="https://s6.uupload.ir/files/file_00000000ccf86246b13f31369cda44aa_rh0z.png" alt="قسمت هفتم استارسیتی" class="thumbnail"></div></div>
+<div id="ep8" class="episode-content"><div class="episode"><h2>قسمت هشتم</h2><p>قسمت هشتم با مرور خاطره‌ای شروع می‌شود... </p><a href="https://www.aparat.com/v/tsu1yrr" target="_blank">مشاهده قسمت هشتم</a><img src="https://s6.uupload.ir/files/inshot_20251110_010312591_zvcw.jpg" alt="قسمت هشتم" class="thumbnail"></div></div>
+<div id="ep9" class="episode-content"><div class="episode"><h2>قسمت نهم</h2><p>در این قسمت گلس من در چاه به هوش می‌آید... ⚠️ رده سنی: بالای ۸ سال</p><a href="https://www.aparat.com/v/ajyp3l9" target="_blank">🎬 مشاهده قسمت نهم در آپارات</a><img src="https://s6.uupload.ir/files/67093379-3806-l_3559_ftq9.jpg" alt="قسمت نهم استارسیتی" class="thumbnail"></div></div>
+<div id="ep10" class="episode-content"><div class="episode"><h2>قسمت دهم: خانه‌ی برگی</h2><p>گلس من در فاضلاب با ویلیجر ناشناس روبرو می‌شود...</p><a href="https://www.aparat.com/v/ghim8ag" target="_blank">🎬 مشاهده قسمت دهم در آپارات</a><img src="https://static.cdn.asset.aparat.cloud/avt/67099626-9344-l__6534.jpg?width=900&quality=90&secret=6wnM_hTfS0p1sRFQ2NBxTQ?123" alt="قسمت دهم استارسیتی" class="thumbnail"></div></div>
+<div id="ep11" class="episode-content"><div class="episode"><h2>قسمت یازدهم</h2><p>در این قسمت گلس من از بیرون به خانه‌ی برگی نگاه می‌کند...</p><a href="https://www.aparat.com/v/ffsn779" target="_blank">مشاهده قسمت یازدهم! 🎬</a><img src="https://static.cdn.asset.aparat.cloud/avt/67526367-8625-l__1236.jpg?width=900&quality=90&secret=fitxOWfCQNq3MiMtDL0Okg?123" alt="قسمت یازدهم استارسیتی" class="thumbnail"></div></div>
+<div id="age" class="episode-content"><div class="age-board"><h2>رده‌بندی سنی قسمت‌ها</h2><table><thead><tr><th>قسمت</th><th>رده‌بندی سنی</th><th>دلیل</th></tr></thead><tbody><tr><td>قسمت اول</td><td>+7</td><td>ماجراجویی ساده</td></tr><tr><td>قسمت دوم</td><td>+7</td><td>ماجراجویی ساده</td></tr><tr><td>قسمت سوم</td><td>+7</td><td>ماجراجویی ساده</td></tr><tr><td>قسمت چهارم</td><td>+7</td><td>ماجراجویی ساده</td></tr><tr><td>قسمت پنجم</td><td>+9</td><td>افکت ترسناک جزئی</td></tr><tr><td>قسمت ششم</td><td>+7</td><td>ماجراجویی ساده</td></tr><tr><td>قسمت هفتم</td><td>+8</td><td>صحنه‌های استرس‌زا و مرگ ناگهانی</td></tr><tr><td>قسمت هشتم</td><td>+9</td><td>استرس‌زا و تاریکی</td></tr><tr><td>قسمت نهم</td><td>+7</td><td>بدون ترس خاص</td></tr></tbody></table></div></div>
+<div id="fast" class="episode-content"><div class="fast-see"><h2>Fast See</h2><div id="fs-ep1"><script type="text/JavaScript" src="https://www.aparat.com/embed/eloy6dn?data[rnddiv]=fs-ep1&data[responsive]=yes&titleShow=true&recom=self"></script></div><div id="fs-ep2"><script type="text/JavaScript" src="https://www.aparat.com/embed/jvoqz2p?data[rnddiv]=fs-ep2&data[responsive]=yes&titleShow=true&recom=self"></script></div><div id="fs-ep3"><script type="text/JavaScript" src="https://www.aparat.com/embed/dsnkswt?data[rnddiv]=fs-ep3&data[responsive]=yes&titleShow=true&recom=self"></script></div><div id="fs-ep4"><script type="text/JavaScript" src="https://www.aparat.com/embed/yjaxp96?data[rnddiv]=fs-ep4&data[responsive]=yes&titleShow=true&recom=self"></script></div><div id="fs-ep6"><script type="text/JavaScript" src="https://www.aparat.com/embed/hmogmjw?data[rnddiv]=fs-ep6&data[responsive]=yes&titleShow=true&recom=self"></script></div><div id="fs-ep7"><script type="text/JavaScript" src="https://www.aparat.com/embed/mmm78bv?data[rnddiv]=fs-ep7&data[responsive]=yes&titleShow=true&recom=self"></script></div><div id="fs-ep8"><script type="text/JavaScript" src="https://www.aparat.com/embed/tsu1yrr?data[rnddiv]=fs-ep8&data[responsive]=yes&titleShow=true&recom=self"></script></div><div id="fs-ep10"><script type="text/JavaScript" src="https://www.aparat.com/embed/ghim8ag?data[rnddiv]=fs-ep10&data[responsive]=yes&titleShow=true&recom=self"></script></div></div></div>
+<h2 style="text-align: center; margin-top: 40px;">بخش کاراکترها</h2><section id="characters"><div class="character-card"><img src="https://s6.uupload.ir/files/inshot_20251122_012023692_zp15.jpg" alt="گلس‌من" class="character-img" /><h3>گلس‌من-glass man</h3><p><strong>بیوگرافی:</strong> مردی شیشه‌ای که برای آقای کاسمیر کار می‌کند.</p><p><strong>شغل:</strong> کارکن آقای کاسمیر</p></div><div class="character-card"><img src="https://s6.uupload.ir/files/inshot_20251124_184921607_b0wh.jpg" alt="املاک تیندا" class="character-img" /><h3>املاکی تیندا-tenda Real Estate</h3><p><strong>بیوگرافی:</strong> او یک املاکی هست که خانه می‌فروشد.</p><p><strong>شغل:</strong> املاکی</p></div><div class="character-card"><img src="https://s6.uupload.ir/files/images_-_2025-11-24t183031.476_djaq.jpeg" alt="آقای کاسمیر" class="character-img" /><h3>آقای کاسمیر-mr casmir</h3><p><strong>بیوگرافی:</strong> صاحب نمایشگاه ماشین و شخصیت مهم شهر.</p><p><strong>شغل:</strong> ماشین فروش / پولدار شهر</p></div></section>
+<div class="trailer-box" style="max-width:700px; margin:30px auto;"><h2>تریلر فصل دوم</h2><p>فصل دوم این سریال در راه است! منتظر ادامه ماجراهای هیجان‌انگیز گلس من باشید...</p><p><strong>فصل دوم به زودی منتشر می‌شود⚡</strong></p><p style="text-align:center; color:#FF4500; font-size:18px; margin-top:20px;">به‌جز سریال، به‌زودی سرور استارسیتی برای ماینکرافت جاوا راه‌اندازی می‌شود.</p><p style="text-align:center; font-weight:bold; color:#FF4500; font-size:16px;">⚠️ دیدگاه‌ها و نظرات کاربران در زیر همینجا نمایش داده می‌شوند ⚠️</p><script src="https://utteranc.es/client.js" repo="creeperglass/Starcity-mincraft-" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script></div>
+<script>function showEpisode(id){const episodes=document.querySelectorAll('.episode-content');episodes.forEach(ep=>{if(ep.id===id){ep.classList.add('active')}else{ep.classList.remove('active')}})}</script>
 </body>
 </html>
